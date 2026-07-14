@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMPN 1 Bangsal Kab. Mojokerto</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+    <!-- ================= NAVBAR COMPONENT ================= -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo & Brand -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+                    <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center text-white font-extrabold shadow-md shadow-blue-500/20">
+                        <!-- Custom SVG Logo SMPN 1 Bangsal -->
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="block text-lg font-extrabold text-slate-900 tracking-tight leading-tight">SMPN 1 BANGSAL</span>
+                        <span class="block text-xs font-semibold text-blue-600 uppercase tracking-widest">Kab. Mojokerto</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Menu -->
+                <div class="hidden md:flex items-center space-x-1">
+                    <button onclick="navigateTo('home')" id="nav-home" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 hover:bg-slate-50">Beranda</button>
+                    <button onclick="navigateTo('profil')" id="nav-profil" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 hover:bg-slate-50">Profil</button>
+                    <button onclick="navigateTo('akademik')" id="nav-akademik" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 hover:bg-slate-50">Akademik</button>
+                    <button onclick="navigateTo('kesiswaan')" id="nav-kesiswaan" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 hover:bg-slate-50">Kesiswaan</button>
+                    <button onclick="navigateTo('layanan')" id="nav-layanan" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 hover:bg-slate-50">Layanan</button>
+                    
+                    <!-- CMS Quick Access Button -->
+                    <span class="h-6 w-[1px] bg-slate-200 mx-2"></span>
+                    <button onclick="navigateTo('cms')" id="nav-cms" class="px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/50 hover:bg-emerald-100 transition-all duration-200 flex items-center gap-1.5">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Admin CMS
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center gap-2">
+                    <button onclick="navigateTo('cms')" class="p-2 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200/50">
+                        <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100 focus:outline-none">
+                        <i id="menu-icon" data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-white px-4 py-3 space-y-1 shadow-inner">
+            <button onclick="navigateTo('home'); toggleMobileMenu()" class="mobile-nav-btn w-full text-left px-4 py-2.5 rounded-lg text-base font-semibold hover:bg-slate-50 block">Beranda</button>
+            <button onclick="navigateTo('profil'); toggleMobileMenu()" class="mobile-nav-btn w-full text-left px-4 py-2.5 rounded-lg text-base font-semibold hover:bg-slate-50 block">Profil</button>
+            <button onclick="navigateTo('akademik'); toggleMobileMenu()" class="mobile-nav-btn w-full text-left px-4 py-2.5 rounded-lg text-base font-semibold hover:bg-slate-50 block">Akademik</button>
+            <button onclick="navigateTo('kesiswaan'); toggleMobileMenu()" class="mobile-nav-btn w-full text-left px-4 py-2.5 rounded-lg text-base font-semibold hover:bg-slate-50 block">Kesiswaan</button>
+            <button onclick="navigateTo('layanan'); toggleMobileMenu()" class="mobile-nav-btn w-full text-left px-4 py-2.5 rounded-lg text-base font-semibold hover:bg-slate-50 block">Layanan</button>
+        </div>
+    </nav>
+
+    <!-- ================= MAIN CONTENT AREA ================= -->
+    <main class="flex-grow">
+
+        <!-- 1. INDEX / HOME SECTION -->
+        <section id="section-home" class="page-section hidden">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden bg-slate-900 text-white py-24 px-4 sm:px-6 lg:px-8">
+                <!-- Background Decoration -->
+                <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                <div class="absolute -top-40 -right-40 w-96 h-96 bg-blue-600 rounded-full blur-3xl opacity-30"></div>
+                <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-emerald-600 rounded-full blur-3xl opacity-20"></div>
+
+                <div class="relative max-w-5xl mx-auto text-center">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-6">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Selamat Datang di Website Resmi
+                    </span>
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+                        Membentuk Generasi Cerdas, <br class="hidden sm:inline">
+                        <span class="bg-gradient-to-r from-blue-400 via-indigo-400 to-emerald-400 bg-clip-text text-transparent">Berkarakter & Berwawasan Lingkungan</span>
+                    </h1>
+                    <p class="text-lg text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed">
+                        SMP Negeri 1 Bangsal berkomitmen menyelenggarakan pendidikan berkualitas untuk mengembangkan potensi akademik dan non-akademik peserta didik.
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button onclick="navigateTo('profil')" class="px-6 py-3 rounded-xl font-bold bg-blue-600 hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/25 flex items-center gap-2">
+                            Pelajari Profil <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="navigateTo('layanan')" class="px-6 py-3 rounded-xl font-bold bg-white/10 hover:bg-white/15 transition-all border border-white/10 flex items-center gap-2">
+                            Pendaftaran PPDB <i data-lucide="user-plus" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Statistics -->
+            <div class="max-w-7xl mx-auto px-4 -mt-10 relative z-10">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-white p-6 rounded-2xl shadow-xl border border-slate-100">
+                    <div class="text-center p-4 border-r border-slate-100 last:border-0">
+                        <div class="text-3xl font-extrabold text-blue-600">840+</div>
+                        <div class="text-xs font-medium text-slate-500 uppercase tracking-wider mt-1">Siswa Aktif</div>
+                    </div>
+                    <div class="text-center p-4 border-r border-slate-100 last:border-0">
+                        <div class="text-3xl font-extrabold text-blue-600">52</div>
+                        <div class="text-xs font-medium text-slate-500 uppercase tracking-wider mt-1">Guru & Staf</div>
+                    </div>
+                    <div class="text-center p-4 border-r border-slate-100 last:border-0">
+                        <div class="text-3xl font-extrabold text-blue-600">24</div>
+                        <div class="text-xs font-medium text-slate-500 uppercase tracking-wider mt-1">Rombel</div>
+                    </div>
+                    <div class="text-center p-4 last:border-0">
+                        <div class="text-3xl font-extrabold text-blue-600">A</div>
+                        <div class="text-xs font-medium text-slate-500 uppercase tracking-wider mt-1">Akreditasi BAN-S/M</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Welcoming Speech (Sambutan Kepsek) -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div class="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-slate-100 flex flex-col md:flex-row gap-10 items-center">
+                    <div class="w-full md:w-1/3 flex flex-col items-center text-center">
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-blue-500 rounded-2xl rotate-3 scale-105"></div>
+                            <!-- Placeholder image for principal with direct styling fallback -->
+                            <img class="relative w-56 h-64 object-cover rounded-2xl shadow-md border-4 border-white" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop" alt="Kepala Sekolah SMPN 1 Bangsal" onerror="this.src='https://placehold.co/400x500/3b82f6/ffffff?text=Kepala+Sekolah'">
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-950 mt-4 leading-tight">Drs. H. Sudarsono, M.Pd.</h4>
+                        <p class="text-sm font-semibold text-blue-600 uppercase tracking-wide">Kepala Sekolah</p>
+                    </div>
+                    <div class="w-full md:w-2/3">
+                        <span class="text-xs font-extrabold text-blue-600 tracking-wider uppercase mb-2 block">Sambutan Hangat</span>
+                        <h2 class="text-3xl font-bold text-slate-900 mb-6">Mewujudkan Sekolah Ramah Anak & Berprestasi</h2>
+                        <div class="prose text-slate-600 leading-relaxed space-y-4">
+                            <p>Assalamu'alaikum Wr. Wb., Salam Sejahtera untuk kita semua.</p>
+                            <p>Selamat datang di portal informasi resmi SMP Negeri 1 Bangsal, Mojokerto. Melalui media informasi digital ini, kami berupaya memberikan akses transparansi informasi mengenai kegiatan akademik, kesiswaan, prestasi, serta program unggulan yang kami jalankan.</p>
+                            <p>Kami meyakini bahwa pendidikan adalah kolaborasi harmonis antara sekolah, orang tua, dan masyarakat. Dengan dukungan kurikulum Merdeka dan lingkungan belajar yang asri (Adiwiyata), kami siap membimbing putra-putri Anda menyongsong masa depan yang gemilang.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic News & Announcements Section -->
+            <div class="bg-slate-100/60 py-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                        <div>
+                            <span class="text-xs font-extrabold text-blue-600 tracking-wider uppercase mb-2 block">Kabar Terbaru</span>
+                            <h2 class="text-3xl font-bold text-slate-900">Berita & Pengumuman Sekolah</h2>
+                        </div>
+                        <button onclick="navigateTo('cms')" class="mt-4 md:mt-0 px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-bold hover:bg-slate-50 transition-all flex items-center gap-2 self-start md:self-auto text-sm">
+                            <i data-lucide="edit-3" class="w-4 h-4 text-slate-400"></i> Kelola Postingan di CMS
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <!-- News Feed (2 Columns on Large Screens) -->
+                        <div class="lg:col-span-2 space-y-6" id="home-news-container">
+                            <!-- Injected dynamically via JS -->
+                        </div>
+
+                        <!-- Announcements Sidebar (1 Column) -->
+                        <div class="space-y-6">
+                            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                                <h3 class="text-lg font-bold text-slate-950 flex items-center gap-2 mb-6 pb-4 border-b border-slate-100">
+                                    <i data-lucide="megaphone" class="text-amber-500 w-5 h-5"></i> Pengumuman Penting
+                                </h3>
+                                <div class="space-y-4" id="home-announcements-container">
+                                    <!-- Injected dynamically via JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. PROFIL SECTION -->
+        <section id="section-profil" class="page-section hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white py-16 px-4">
+                <div class="max-w-7xl mx-auto text-center">
+                    <h1 class="text-3xl sm:text-4xl font-extrabold mb-4">Profil Sekolah</h1>
+                    <p class="text-slate-200 max-w-xl mx-auto">Mengenal lebih dekat sejarah, visi, misi, dan struktur organisasi SMPN 1 Bangsal Kab. Mojokerto.</p>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <!-- Sejarah Singkat -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
+                    <div>
+                        <span class="text-xs font-extrabold text-blue-600 tracking-wider uppercase mb-2 block">Asal Usul</span>
+                        <h2 class="text-3xl font-bold text-slate-900 mb-6">Sejarah Singkat Sekolah</h2>
+                        <div class="text-slate-600 space-y-4 leading-relaxed">
+                            <p>SMP Negeri 1 Bangsal didirikan pada tahun 1984 guna menjawab kebutuhan pendidikan tingkat pertama yang berkualitas di kawasan kecamatan Bangsal dan sekitarnya di Kabupaten Mojokerto.</p>
+                            <p>Berawal dari fasilitas sarana prasarana yang terbatas, sekolah terus berbenah secara progresif. Melalui dedikasi para pendidik dan antusiasme masyarakat, saat ini SMPN 1 Bangsal telah bertransformasi menjadi salah satu sekolah berpredikat Adiwiyata Mandiri dengan fasilitas modern yang ramah lingkungan.</p>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <img class="rounded-2xl shadow-lg w-full h-[350px] object-cover" src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop" alt="Lingkungan SMPN 1 Bangsal" onerror="this.src='https://placehold.co/800x450/3b82f6/ffffff?text=Gedung+Sekolah'">
+                    </div>
+                </div>
+
+                <!-- Visi & Misi Tab Interface -->
+                <div class="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-slate-100 mb-20">
+                    <div class="text-center max-w-xl mx-auto mb-10">
+                        <h2 class="text-2xl font-bold text-slate-950 mb-3">Visi, Misi & Tujuan</h2>
+                        <p class="text-slate-500 text-sm">Landasan filosofis arah pergerakan dan sasaran mutu institusi pendidikan kami.</p>
+                    </div>
+
+                    <!-- Tabs Button -->
+                    <div class="flex justify-center border-b border-slate-100 mb-8">
+                        <div class="flex space-x-8">
+                            <button onclick="setActiveTab('visi')" id="tab-btn-visi" class="tab-btn border-b-2 border-transparent pb-4 text-sm font-bold text-slate-400 hover:text-slate-600 transition-all">VISI</button>
+                            <button onclick="setActiveTab('misi')" id="tab-btn-misi" class="tab-btn border-b-2 border-transparent pb-4 text-sm font-bold text-slate-400 hover:text-slate-600 transition-all">MISI</button>
+                            <button onclick="setActiveTab('tujuan')" id="tab-btn-tujuan" class="tab-btn border-b-2 border-transparent pb-4 text-sm font-bold text-slate-400 hover:text-slate-600 transition-all">TUJUAN</button>
+                        </div>
+                    </div>
+
+                    <!-- Tabs Contents -->
+                    <div id="tab-content-visi" class="tab-content hidden text-center max-w-3xl mx-auto py-6">
+                        <i data-lucide="quote" class="w-12 h-12 text-blue-200 mx-auto mb-6"></i>
+                        <p class="text-2xl font-extrabold text-slate-900 leading-relaxed italic">
+                            "Terwujudnya Lulusan yang Cerdas, Kompetitif, Berkarakter Islami/Sesuai Profil Pelajar Pancasila, Serta Peduli Terhadap Kelestarian Lingkungan Hidup."
+                        </p>
+                    </div>
+
+                    <div id="tab-content-misi" class="tab-content hidden max-w-2xl mx-auto py-4">
+                        <ul class="space-y-4">
+                            <li class="flex gap-4">
+                                <span class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-50 text-blue-600 font-bold flex items-center justify-center">1</span>
+                                <p class="text-slate-600 pt-1">Melaksanakan pembelajaran inovatif yang mengintegrasikan nilai religius, IPTEK, dan seni budaya secara berkelanjutan.</p>
+                            </li>
+                            <li class="flex gap-4">
+                                <span class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-50 text-blue-600 font-bold flex items-center justify-center">2</span>
+                                <p class="text-slate-600 pt-1">Mengembangkan karakter pelajar pancasila melalui penguatan projek profil di seluruh lingkungan sekolah.</p>
+                            </li>
+                            <li class="flex gap-4">
+                                <span class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-50 text-blue-600 font-bold flex items-center justify-center">3</span>
+                                <p class="text-slate-600 pt-1">Membudayakan gerakan peduli dan berbudaya lingkungan hidup (PBLHS) demi mencegah pencemaran dan kerusakan alam.</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div id="tab-content-tujuan" class="tab-content hidden max-w-2xl mx-auto py-4">
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600">Menghasilkan kelulusan 100% yang berakhlak mulia dan siap melanjutkan ke jenjang menengah atas favorit.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600">Mewujudkan iklim sekolah yang asri, sehat, bebas dari sampah plastik, dan hijau (Adiwiyata).</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600">Menjadi wadah berprestasi siswa di bidang keolahragaan dan kesenian tingkat daerah maupun nasional.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Struktur Organisasi -->
+                <div>
+                    <div class="text-center max-w-xl mx-auto mb-12">
+                        <span class="text-xs font-extrabold text-blue-600 tracking-wider uppercase mb-2 block">Manajemen</span>
+                        <h2 class="text-3xl font-bold text-slate-900">Struktur Organisasi Sekolah</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                        <!-- Card Komite -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-100 text-center shadow-sm">
+                            <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i data-lucide="users" class="w-8 h-8"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-900">H. Suhariyanto</h4>
+                            <p class="text-xs text-slate-500 font-medium">Ketua Komite Sekolah</p>
+                        </div>
+                        <!-- Card Kepsek -->
+                        <div class="bg-white p-6 rounded-2xl border-2 border-blue-100 text-center shadow-md relative -translate-y-2">
+                            <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full">Pimpinan</span>
+                            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i data-lucide="user-check" class="w-8 h-8"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-900">Drs. H. Sudarsono, M.Pd.</h4>
+                            <p class="text-xs text-blue-600 font-bold uppercase mt-1">Kepala Sekolah</p>
+                        </div>
+                        <!-- Card Wakasek -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-100 text-center shadow-sm">
+                            <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i data-lucide="award" class="w-8 h-8"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-900">Siti Nurjanah, S.Pd.</h4>
+                            <p class="text-xs text-slate-500 font-medium">Wakil Kepala Sekolah</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. AKADEMIK SECTION -->
+        <section id="section-akademik" class="page-section hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white py-16 px-4">
+                <div class="max-w-7xl mx-auto text-center">
+                    <h1 class="text-3xl sm:text-4xl font-extrabold mb-4">Layanan Akademik</h1>
+                    <p class="text-teal-100 max-w-xl mx-auto">Sistem kurikulum merdeka, tenaga pendidik bersertifikasi profesional, dan manajemen kelas terpadu.</p>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <!-- Kurikulum -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6">
+                                <i data-lucide="book-open" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Kurikulum Merdeka</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6">Menerapkan sistem pembelajaran terdiferensiasi yang memfokuskan pengembangan soft skills dan karakter mulia siswa melalui Projek Penguatan Profil Pelajar Pancasila (P5).</p>
+                        </div>
+                        <span class="text-xs font-bold text-blue-600 uppercase tracking-widest">Kelas VII, VIII & IX</span>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6">
+                                <i data-lucide="calendar" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Kalender Akademik</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6">Penjadwalan KBM secara teratur mulai dari Penilaian Sumatif Tengah Semester, Kegiatan Projek Akhir Semester, hingga Libur Semesteran terjadwal berkala.</p>
+                        </div>
+                        <a href="#" class="text-xs font-bold text-emerald-600 hover:underline flex items-center gap-1">Download Kalender PDF <i data-lucide="download" class="w-3.5 h-3.5"></i></a>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mb-6">
+                                <i data-lucide="laptop" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Digital Classroom</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6">Setiap ruang kelas didukung oleh jaringan konektivitas Wifi sekolah serta alat proyeksi interaktif untuk memaksimalkan multimedia instruksional saat KBM.</p>
+                        </div>
+                        <span class="text-xs font-bold text-amber-600 uppercase tracking-widest">Fasilitas Modern</span>
+                    </div>
+                </div>
+
+                <!-- Guru & Staf Directiories -->
+                <div>
+                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                        <div>
+                            <span class="text-xs font-extrabold text-blue-600 tracking-wider uppercase mb-2 block">Daftar Guru</span>
+                            <h2 class="text-3xl font-bold text-slate-900">Dewan Pendidik Terbaik</h2>
+                        </div>
+                        <div class="mt-4 md:mt-0 relative w-full md:w-80">
+                            <i data-lucide="search" class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input onkeyup="filterTeachers(this.value)" type="text" placeholder="Cari nama guru / mapel..." class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm">
+                        </div>
+                    </div>
+
+                    <!-- Teachers Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="teachers-grid">
+                        <!-- Data will be dynamically rendered -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. KESISWAAN SECTION -->
+        <section id="section-kesiswaan" class="page-section hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-amber-700 to-orange-800 text-white py-16 px-4">
+                <div class="max-w-7xl mx-auto text-center">
+                    <h1 class="text-3xl sm:text-4xl font-extrabold mb-4">Kesiswaan & Ekstrakurikuler</h1>
+                    <p class="text-amber-100 max-w-xl mx-auto">Mengasah minat, bakat, keorganisasian, serta menumbuhkembangkan prestasi gemilang generasi muda.</p>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <!-- Ekstrakurikuler -->
+                <div class="mb-20">
+                    <div class="text-center max-w-xl mx-auto mb-12">
+                        <span class="text-xs font-extrabold text-orange-600 tracking-wider uppercase mb-2 block">Pengembangan Diri</span>
+                        <h2 class="text-3xl font-bold text-slate-900">Ekstrakurikuler Pilihan</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- OSIS -->
+                        <div class="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-md transition-all">
+                            <img class="w-full h-48 object-cover" src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=400&auto=format&fit=crop" alt="OSIS" onerror="this.src='https://placehold.co/400x250/3b82f6/ffffff?text=OSIS'">
+                            <div class="p-6">
+                                <span class="text-[10px] font-extrabold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Wajib / Khusus</span>
+                                <h4 class="text-lg font-bold text-slate-900 mb-2">OSIS (Organisasi Siswa Intra Sekolah)</h4>
+                                <p class="text-slate-600 text-sm leading-relaxed">Pusat kaderisasi kepemimpinan kesiswaan dalam merencanakan program kerja edukatif di sekolah.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pramuka -->
+                        <div class="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-md transition-all">
+                            <img class="w-full h-48 object-cover" src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?q=80&w=400&auto=format&fit=crop" alt="Pramuka" onerror="this.src='https://placehold.co/400x250/b45309/ffffff?text=Pramuka'">
+                            <div class="p-6">
+                                <span class="text-[10px] font-extrabold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Karakter</span>
+                                <h4 class="text-lg font-bold text-slate-900 mb-2">Pramuka (Praja Muda Karana)</h4>
+                                <p class="text-slate-600 text-sm leading-relaxed">Ekstrakurikuler wajib guna menempa kedisiplinan, kemandirian, kekompakan, dan jiwa bela negara.</p>
+                            </div>
+                        </div>
+
+                        <!-- Olahraga & Seni -->
+                        <div class="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-md transition-all">
+                            <img class="w-full h-48 object-cover" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=400&auto=format&fit=crop" alt="Seni Musik" onerror="this.src='https://placehold.co/400x250/10b981/ffffff?text=Seni+Siswa'">
+                            <div class="p-6">
+                                <span class="text-[10px] font-extrabold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Minat Bakat</span>
+                                <h4 class="text-lg font-bold text-slate-900 mb-2">Seni Tari, Musik & Olahraga</h4>
+                                <p class="text-slate-600 text-sm leading-relaxed">Mengembangkan kepekaan estetika seni tradisional-modern serta jasmani yang bugar kompetitif.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prestasi -->
+                <div>
+                    <div class="bg-slate-900 text-white p-8 md:p-12 rounded-3xl relative overflow-hidden">
+                        <div class="absolute -top-12 -right-12 w-64 h-64 bg-amber-500 rounded-full blur-3xl opacity-20"></div>
+                        
+                        <div class="relative z-10 max-w-2xl">
+                            <span class="inline-flex items-center gap-1 text-xs font-bold text-amber-400 bg-amber-400/10 border border-amber-400/25 px-3 py-1 rounded-full mb-4">
+                                <i data-lucide="star" class="w-3.5 h-3.5 fill-amber-400 text-amber-400"></i> Galeri Prestasi Terkini
+                            </span>
+                            <h3 class="text-2xl sm:text-3xl font-bold mb-4">Bangga Atas Prestasi Siswa</h3>
+                            <p class="text-slate-300 text-sm leading-relaxed mb-8">Setiap tahunnya, siswa-siswi SMPN 1 Bangsal selalu berkontribusi positif dalam membawa pulang gelar kejuaraan baik di tingkat Kabupaten, Karesidenan, maupun Provinsi Jawa Timur.</p>
+                        </div>
+
+                        <!-- List Prestasi -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 relative z-10">
+                            <div class="bg-white/5 border border-white/10 rounded-xl p-4 flex gap-4 items-center">
+                                <div class="w-12 h-12 bg-amber-500/10 text-amber-400 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="trophy" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-sm">Juara 1 Lomba Pramuka Penggalang</h5>
+                                    <p class="text-xs text-slate-400">Tingkat Kabupaten Mojokerto 2026</p>
+                                </div>
+                            </div>
+                            <div class="bg-white/5 border border-white/10 rounded-xl p-4 flex gap-4 items-center">
+                                <div class="w-12 h-12 bg-amber-500/10 text-amber-400 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="trophy" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-sm">Medali Emas Olimpiade Matematika</h5>
+                                    <p class="text-xs text-slate-400">Tingkat Regional Jawa Timur 2025</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. LAYANAN SECTION -->
+        <section id="section-layanan" class="page-section hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-blue-900 via-indigo-950 to-blue-950 text-white py-16 px-4">
+                <div class="max-w-7xl mx-auto text-center">
+                    <h1 class="text-3xl sm:text-4xl font-extrabold mb-4">Layanan Sekolah & PPDB</h1>
+                    <p class="text-blue-100 max-w-xl mx-auto">Pendaftaran siswa baru, aduan online, sirkulasi perpustakaan, dan integrasi digital lainnya secara cepat.</p>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                    
+                    <!-- PPDB Interactive Form -->
+                    <div class="lg:col-span-2 bg-white rounded-3xl p-8 border border-slate-100 shadow-sm">
+                        <span class="text-xs font-extrabold text-blue-600 tracking-wider uppercase mb-2 block">Pendaftaran Online</span>
+                        <h2 class="text-2xl font-bold text-slate-900 mb-6">Simulasi PPDB Online TP. 2026/2027</h2>
+                        
+                        <form id="ppdb-form" onsubmit="handlePPDBSubmit(event)" class="space-y-5">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nama Lengkap Siswa</label>
+                                    <input required type="text" id="ppdb-name" placeholder="Sesuai Akta Lahir" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">NISN</label>
+                                    <input required type="number" id="ppdb-nisn" placeholder="10 Digit Angka" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Sekolah Asal (SD/MI)</label>
+                                    <input required type="text" id="ppdb-school" placeholder="Contoh: SDN 1 Bangsal" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Jalur Pendaftaran</label>
+                                    <select required id="ppdb-path" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm bg-white">
+                                        <option value="">Pilih Jalur</option>
+                                        <option value="Zonasi">Zonasi Domisili</option>
+                                        <option value="Prestasi">Prestasi Akademik / Non-Akademik</option>
+                                        <option value="Afirmasi">Afirmasi (Keluarga Tidak Mampu)</option>
+                                        <option value="Perpindahan">Perpindahan Tugas Orang Tua</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nomor HP / WhatsApp Aktif</label>
+                                <input required type="tel" id="ppdb-phone" placeholder="Contoh: 081234567xxx" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm">
+                            </div>
+
+                            <button type="submit" class="w-full py-3.5 rounded-xl font-bold bg-blue-600 hover:bg-blue-500 text-white transition-all shadow-lg shadow-blue-500/20 text-sm flex items-center justify-center gap-2">
+                                <i data-lucide="send" class="w-4 h-4"></i> Ajukan Formulir Pendaftaran
+                            </button>
+                        </form>
+
+                        <!-- PPDB Response Message Box -->
+                        <div id="ppdb-success-msg" class="hidden mt-6 p-5 bg-emerald-50 border border-emerald-100 rounded-2xl flex gap-4 items-start">
+                            <div class="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="check" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-emerald-900 text-sm mb-1">Pendaftaran Simulasi Berhasil!</h5>
+                                <p class="text-xs text-emerald-700 leading-relaxed">Data pendaftar atas nama <strong id="ppdb-success-name"></strong> telah tersimpan di sistem SMPN 1 Bangsal. Admin panitia PPDB akan segera menghubungi Anda melalui nomor WhatsApp.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Side Services Info & Helpdesk -->
+                    <div class="space-y-6">
+                        <!-- Kotak Saran / Layanan Pengaduan -->
+                        <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                            <h3 class="text-lg font-bold text-slate-950 mb-4 pb-3 border-b border-slate-100 flex items-center gap-2">
+                                <i data-lucide="message-square" class="text-blue-500 w-5 h-5"></i> Hubungi Helpdesk
+                            </h3>
+                            <p class="text-slate-600 text-xs leading-relaxed mb-4">Punya pertanyaan seputar kurikulum, administrasi legalisir, atau PPDB? Hubungi operator admin kami.</p>
+                            <div class="space-y-3">
+                                <a href="https://wa.me/#" target="_blank" class="flex items-center gap-3 p-3 rounded-xl border border-emerald-100 bg-emerald-50/50 hover:bg-emerald-50 transition-all">
+                                    <i data-lucide="phone" class="text-emerald-600 w-5 h-5"></i>
+                                    <div>
+                                        <div class="text-xs font-bold text-emerald-950">Chat Admin WhatsApp</div>
+                                        <div class="text-[10px] text-emerald-700">Respons Cepat (08.00 - 14.00)</div>
+                                    </div>
+                                </a>
+                                <a href="mailto:admin@smpn1bangsal.sch.id" class="flex items-center gap-3 p-3 rounded-xl border border-blue-100 bg-blue-50/50 hover:bg-blue-50 transition-all">
+                                    <i data-lucide="mail" class="text-blue-600 w-5 h-5"></i>
+                                    <div>
+                                        <div class="text-xs font-bold text-blue-950">Email Resmi Sekolah</div>
+                                        <div class="text-[10px] text-blue-700">smpn1bangsal@mojokerto.go.id</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Perpustakaan Digital Link -->
+                        <div class="bg-gradient-to-br from-indigo-900 to-indigo-950 text-white p-6 rounded-3xl shadow-sm relative overflow-hidden">
+                            <div class="absolute -bottom-8 -right-8 w-32 h-32 bg-indigo-500 rounded-full blur-2xl opacity-30"></div>
+                            <h3 class="text-lg font-bold mb-2 flex items-center gap-2">
+                                <i data-lucide="book-marked" class="text-indigo-400 w-5 h-5"></i> E-Library (Aplikasi)
+                            </h3>
+                            <p class="text-xs text-indigo-200 leading-relaxed mb-6">Akses ribuan modul ajar, buku paket, dan bacaan referensi perpustakaan sekolah langsung dari gadget Anda.</p>
+                            <button onclick="alert('Simulasi Redirect ke Portal E-Library')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 font-bold text-xs rounded-lg transition-all shadow-md flex items-center gap-1">
+                                Jelajahi E-Library <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. ADMIN CMS DASHBOARD SECTION -->
+        <section id="section-cms" class="page-section hidden bg-slate-100 min-h-screen py-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Header Panel -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-emerald-600/20">
+                            <i data-lucide="layout-dashboard" class="w-8 h-8"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h1 class="text-2xl font-extrabold text-slate-900">CMS Konten Sekolah</h1>
+                                <span class="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">Demo Live</span>
+                            </div>
+                            <p class="text-slate-500 text-sm mt-0.5">Kelola data berita, pengumuman, dan guru yang tampil di bagian frontend.</p>
+                        </div>
+                    </div>
+                    <button onclick="navigateTo('home')" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="globe" class="w-4 h-4"></i> Lihat Tampilan Website
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Left: Form Editor (Post Berita / Pengumuman) -->
+                    <div class="lg:col-span-1 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm h-fit">
+                        <h3 class="text-lg font-bold text-slate-950 mb-6 pb-3 border-b border-slate-100 flex items-center gap-2">
+                            <i data-lucide="plus-circle" class="text-emerald-600 w-5 h-5"></i> Buat Konten Baru
+                        </h3>
+                        
+                        <form id="cms-form" onsubmit="handleCMSPublish(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Tipe Postingan</label>
+                                <select required id="cms-type" onchange="toggleCMSFormFields(this.value)" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-sm bg-white">
+                                    <option value="berita">Berita Sekolah</option>
+                                    <option value="pengumuman">Pengumuman Penting</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Judul Konten</label>
+                                <input required type="text" id="cms-title" placeholder="Contoh: Pembagian Rapor Semester 1" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-sm">
+                            </div>
+
+                            <div id="cms-image-field">
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">URL Gambar Ilustrasi</label>
+                                <input type="text" id="cms-image" value="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?q=80&w=600&auto=format&fit=crop" placeholder="https://unsplash.com/..." class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-sm">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Isi Konten / Deskripsi</label>
+                                <textarea required id="cms-content" rows="4" placeholder="Ketik isi pengumuman atau berita secara detail di sini..." class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-sm custom-scrollbar"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm rounded-xl transition-all shadow-md shadow-emerald-500/10 flex items-center justify-center gap-1.5">
+                                <i data-lucide="check-square" class="w-4 h-4"></i> Terbitkan Sekarang
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Right: Lists of Existing Posts & Data -->
+                    <div class="lg:col-span-2 space-y-8">
+                        <!-- Existing News -->
+                        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                            <h3 class="text-lg font-bold text-slate-950 mb-6 flex items-center justify-between pb-3 border-b border-slate-100">
+                                <span class="flex items-center gap-2"><i data-lucide="newspaper" class="text-blue-500 w-5 h-5"></i> Daftar Berita Aktif</span>
+                                <span id="cms-news-count" class="bg-blue-50 text-blue-700 text-xs px-2.5 py-0.5 rounded-full font-bold">0 Berita</span>
+                            </h3>
+                            <div class="divide-y divide-slate-100 max-h-96 overflow-y-auto custom-scrollbar pr-2" id="cms-news-list">
+                                <!-- Dynamically Rendered -->
+                            </div>
+                        </div>
+
+                        <!-- Existing Announcements -->
+                        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                            <h3 class="text-lg font-bold text-slate-950 mb-6 flex items-center justify-between pb-3 border-b border-slate-100">
+                                <span class="flex items-center gap-2"><i data-lucide="megaphone" class="text-amber-500 w-5 h-5"></i> Daftar Pengumuman</span>
+                                <span id="cms-ann-count" class="bg-amber-50 text-amber-700 text-xs px-2.5 py-0.5 rounded-full font-bold">0 Pengumuman</span>
+                            </h3>
+                            <div class="divide-y divide-slate-100 max-h-80 overflow-y-auto custom-scrollbar pr-2" id="cms-ann-list">
+                                <!-- Dynamically Rendered -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ================= FOOTER COMPONENT ================= -->
+    <footer class="bg-slate-900 text-slate-400 border-t border-slate-800">
+        <!-- Top Footer Grid -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+                <!-- Branding column -->
+                <div class="md:col-span-1.5 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-extrabold shadow-sm">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                            </svg>
+                        </div>
+                        <span class="text-md font-extrabold text-white tracking-tight leading-tight">SMPN 1 BANGSAL</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Penyelenggara pendidikan tingkat menengah pertama negeri berpredikat Adiwiyata di Kecamatan Bangsal, Kabupaten Mojokerto, Jawa Timur.
+                    </p>
+                    <div class="flex items-center space-x-3 pt-2">
+                        <a href="#" class="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                        <a href="#" class="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                        <a href="#" class="p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Navigation Links -->
+                <div>
+                    <h4 class="text-xs font-extrabold text-white uppercase tracking-wider mb-4">Pintasan Link</h4>
+                    <ul class="space-y-2.5 text-xs">
+                        <li><button onclick="navigateTo('home')" class="hover:text-white transition-all text-left">Beranda Utama</button></li>
+                        <li><button onclick="navigateTo('profil')" class="hover:text-white transition-all text-left">Profil Visi-Misi</button></li>
+                        <li><button onclick="navigateTo('akademik')" class="hover:text-white transition-all text-left">Akademik & Guru</button></li>
+                        <li><button onclick="navigateTo('kesiswaan')" class="hover:text-white transition-all text-left">Kesiswaan & Ekskul</button></li>
+                        <li><button onclick="navigateTo('layanan')" class="hover:text-white transition-all text-left">Portal Layanan PPDB</button></li>
+                    </ul>
+                </div>
+
+                <!-- Academic Hours Info -->
+                <div>
+                    <h4 class="text-xs font-extrabold text-white uppercase tracking-wider mb-4">Jam Operasional</h4>
+                    <ul class="space-y-2.5 text-xs leading-relaxed">
+                        <li class="flex justify-between"><span>Senin - Kamis</span> <span class="text-white">07.00 - 14.15</span></li>
+                        <li class="flex justify-between"><span>Jumat</span> <span class="text-white">07.00 - 11.30</span></li>
+                        <li class="flex justify-between"><span>Sabtu - Minggu</span> <span class="text-emerald-400">Libur</span></li>
+                    </ul>
+                </div>
+
+                <!-- Contact & Address -->
+                <div>
+                    <h4 class="text-xs font-extrabold text-white uppercase tracking-wider mb-4">Hubungi Sekolah</h4>
+                    <ul class="space-y-3 text-xs leading-relaxed">
+                        <li class="flex gap-2 items-start">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5"></i>
+                            <span>Jl. Raya Gading No.12, Bangsal, Kec. Bangsal, Kab. Mojokerto, Jawa Timur 61381</span>
+                        </li>
+                        <li class="flex gap-2 items-center">
+                            <i data-lucide="phone" class="w-4 h-4 text-blue-500 flex-shrink-0"></i>
+                            <span>(0321) 591234</span>
+                        </li>
+                        <li class="flex gap-2 items-center">
+                            <i data-lucide="mail" class="w-4 h-4 text-blue-500 flex-shrink-0"></i>
+                            <span>admin@smpn1bangsal.sch.id</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom copyright -->
+        <div class="border-t border-slate-800/80 py-6 text-center text-xs text-slate-500">
+            <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+                <span>&copy; 2026 SMPN 1 Bangsal Kab. Mojokerto. All rights reserved.</span>
+                <span class="flex items-center gap-1">Dibuat dengan <i data-lucide="heart" class="w-3.5 h-3.5 text-red-500 fill-red-500"></i> Untuk Pendidikan Negeri</span>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ================= JAVASCRIPT STATE & APP LOGIC ================= -->
+    <script>
+        // Initial Mock Data (Saves state in-memory during session)
+        const initialNews = [
+            {
+                id: 'news-1',
+                title: "SMPN 1 Bangsal Merayakan Peringatan Hari Adiwiyata dengan Penanaman 100 Pohon",
+                date: "12 Juli 2026",
+                category: "Lingkungan",
+                content: "Dalam menyukseskan komitmen sekolah Adiwiyata, seluruh dewan guru beserta siswa kader lingkungan melakukan aksi penanaman bibit pohon di sepanjang jalur hijau pekarangan sekolah serta pelatihan pengolahan pupuk organik mandiri.",
+                image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=600&auto=format&fit=crop"
+            },
+            {
+                id: 'news-2',
+                title: "Sosialisasi Implementasi Projek Profil Pelajar Pancasila (P5) Semester Ganjil",
+                date: "05 Juli 2026",
+                category: "Akademik",
+                content: "Rapat koordinasi bersama komite sekolah dan orang tua murid sukses menyelaraskan pemahaman mengenai proyek kepemimpinan siswa bertema 'Gaya Hidup Berkelanjutan' yang akan dimulai awal bulan depan.",
+                image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=600&auto=format&fit=crop"
+            }
+        ];
+
+        const initialAnnouncements = [
+            {
+                id: 'ann-1',
+                title: "Jadwal Pengambilan Formulir PPDB Jalur Zonasi Tahap II",
+                date: "13 Juli 2026",
+                content: "Bagi calon wali murid baru, harap hadir di aula utama membawa kelengkapan kartu keluarga dan fotokopi ijazah SD mulai pukul 08.00 WIB."
+            },
+            {
+                id: 'ann-2',
+                title: "Pengumuman Libur Tahun Baru Hijriah 1448 H",
+                date: "11 Juli 2026",
+                content: "KBM ditiadakan selama 1 hari sesuai dengan keputusan SKB Tiga Menteri dan akan masuk kembali normal pada keesokan harinya."
+            }
+        ];
+
+        const teachers = [
+            { name: "Drs. H. Sudarsono, M.Pd.", role: "Kepala Sekolah", subject: "Matematika", image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=300&auto=format&fit=crop" },
+            { name: "Siti Nurjanah, S.Pd.", role: "Waka Kurikulum", subject: "Bahasa Inggris", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=300&auto=format&fit=crop" },
+            { name: "Budi Santoso, S.Pd.", role: "Guru Pembina OSIS", subject: "IPA Terpadu", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop" },
+            { name: "Rina Kartika, S.Sn.", role: "Guru Pendidik", subject: "Seni Budaya", image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=300&auto=format&fit=crop" },
+            { name: "Joko Supriyadi, S.Pd.", role: "Guru Pembina Pramuka", subject: "PJOK", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop" },
+            { name: "Lilik Handayani, M.Pd.", role: "Guru Pendidik", subject: "Bahasa Indonesia", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=300&auto=format&fit=crop" },
+            { name: "Achmad Fauzi, S.Th.I.", role: "Guru Keagamaan", subject: "Pendidikan Agama Islam", image: "https://images.unsplash.com/photo-1620122303020-43ec4b6cf7f8?q=80&w=300&auto=format&fit=crop" },
+            { name: "Dewi Lestari, S.Pd.", role: "Guru Konseling", subject: "Bimbingan Konseling", image: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?q=80&w=300&auto=format&fit=crop" }
+        ];
+
+        // App States
+        let currentSection = 'home';
+        let currentProfilTab = 'visi';
+        let newsData = [...initialNews];
+        let announcementsData = [...initialAnnouncements];
+
+        // On DOM Load
+        window.onload = function() {
+            lucide.createIcons();
+            navigateTo('home');
+            setActiveTab('visi');
+            renderNews();
+            renderAnnouncements();
+            renderTeachersGrid(teachers);
+            renderCMSLists();
+        };
+
+        // Navigation Controller (SPA Router Sim)
+        function navigateTo(sectionId) {
+            currentSection = sectionId;
+            
+            // Hide all sections
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show target section
+            const activeSec = document.getElementById(`section-${sectionId}`);
+            if (activeSec) {
+                activeSec.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Update Navigation Menu Active Class (Desktop)
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-blue-600', 'bg-blue-50');
+                btn.classList.add('text-slate-600');
+            });
+
+            const activeNavBtn = document.getElementById(`nav-${sectionId}`);
+            if (activeNavBtn) {
+                if(sectionId === 'cms') {
+                    // Cms has special button styles, skip standard active classes
+                } else {
+                    activeNavBtn.classList.add('text-blue-600', 'bg-blue-50');
+                    activeNavBtn.classList.remove('text-slate-600');
+                }
+            }
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+            const isHidden = menu.classList.contains('hidden');
+            
+            if (isHidden) {
+                menu.classList.remove('hidden');
+                menuIcon.setAttribute('data-lucide', 'x');
+            } else {
+                menu.classList.add('hidden');
+                menuIcon.setAttribute('data-lucide', 'menu');
+            }
+            lucide.createIcons();
+        }
+
+        // Profil Section - Tabs Controller
+        function setActiveTab(tabName) {
+            currentProfilTab = tabName;
+            
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Reset Tab Buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('border-blue-600', 'text-slate-900');
+                btn.classList.add('border-transparent', 'text-slate-400');
+            });
+
+            // Show active
+            document.getElementById(`tab-content-${tabName}`).classList.remove('hidden');
+            
+            const activeBtn = document.getElementById(`tab-btn-${tabName}`);
+            activeBtn.classList.add('border-blue-600', 'text-slate-900');
+            activeBtn.classList.remove('text-slate-400');
+        }
+
+        // Render News on Home/Index
+        function renderNews() {
+            const newsContainer = document.getElementById('home-news-container');
+            newsContainer.innerHTML = '';
+
+            if (newsData.length === 0) {
+                newsContainer.innerHTML = `
+                    <div class="bg-white p-8 rounded-2xl text-center border border-slate-100 text-slate-500">
+                        Belum ada berita yang diterbitkan.
+                    </div>
+                `;
+                return;
+            }
+
+            newsData.forEach(item => {
+                const article = `
+                    <article class="bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm flex flex-col sm:flex-row gap-6 p-5 hover:shadow-md transition-all">
+                        <img class="w-full sm:w-48 h-48 sm:h-auto object-cover rounded-2xl" src="${item.image}" alt="${item.title}" onerror="this.src='https://placehold.co/400x300/3b82f6/ffffff?text=SMPN+1+Bangsal'">
+                        <div class="flex flex-col justify-between py-1">
+                            <div>
+                                <div class="flex items-center gap-3 mb-3">
+                                    <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full uppercase tracking-wider">${item.category || 'Sekolah'}</span>
+                                    <span class="text-xs text-slate-400 font-medium">${item.date}</span>
+                                </div>
+                                <h4 class="text-lg font-bold text-slate-950 mb-2 hover:text-blue-600 cursor-pointer">${item.title}</h4>
+                                <p class="text-slate-600 text-xs leading-relaxed line-clamp-3">${item.content}</p>
+                            </div>
+                            <button onclick="viewNewsDetail('${item.id}')" class="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1 mt-4">Selengkapnya <i data-lucide="chevron-right" class="w-3 h-3"></i></button>
+                        </div>
+                    </article>
+                `;
+                newsContainer.insertAdjacentHTML('beforeend', article);
+            });
+            lucide.createIcons();
+        }
+
+        // Render Announcements Sidebar
+        function renderAnnouncements() {
+            const annContainer = document.getElementById('home-announcements-container');
+            annContainer.innerHTML = '';
+
+            if (announcementsData.length === 0) {
+                annContainer.innerHTML = `
+                    <p class="text-sm text-slate-400 text-center py-4">Tidak ada pengumuman baru.</p>
+                `;
+                return;
+            }
+
+            announcementsData.forEach(ann => {
+                const item = `
+                    <div class="p-4 rounded-xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100">
+                        <span class="text-[10px] font-bold text-slate-400 block mb-1">${ann.date}</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-1.5">${ann.title}</h4>
+                        <p class="text-slate-500 text-xs leading-relaxed line-clamp-2">${ann.content}</p>
+                    </div>
+                `;
+                annContainer.insertAdjacentHTML('beforeend', item);
+            });
+        }
+
+        // Render Teachers list (Akademik Section)
+        function renderTeachersGrid(list) {
+            const grid = document.getElementById('teachers-grid');
+            grid.innerHTML = '';
+
+            if (list.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center text-slate-400">Guru tidak ditemukan.</div>
+                `;
+                return;
+            }
+
+            list.forEach(teacher => {
+                const card = `
+                    <div class="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm text-center p-5">
+                        <img class="w-24 h-24 rounded-full object-cover mx-auto mb-4 border-2 border-slate-100" src="${teacher.image}" alt="${teacher.name}" onerror="this.src='https://placehold.co/150/e2e8f0/64748b?text=Guru'">
+                        <h4 class="font-bold text-slate-900 text-sm leading-tight">${teacher.name}</h4>
+                        <p class="text-[10px] text-blue-600 font-bold uppercase tracking-wider mt-1">${teacher.role}</p>
+                        <div class="mt-4 pt-4 border-t border-slate-50 flex items-center justify-center gap-1.5 text-xs text-slate-500">
+                            <i data-lucide="book" class="w-3.5 h-3.5 text-slate-400"></i> Mapel: ${teacher.subject}
+                        </div>
+                    </div>
+                `;
+                grid.insertAdjacentHTML('beforeend', card);
+            });
+            lucide.createIcons();
+        }
+
+        // Search Filter for Teachers
+        function filterTeachers(query) {
+            const filtered = teachers.filter(t => 
+                t.name.toLowerCase().includes(query.toLowerCase()) || 
+                t.subject.toLowerCase().includes(query.toLowerCase())
+            );
+            renderTeachersGrid(filtered);
+        }
+
+        // Handle PPDB Submission (Layanan Section)
+        function handlePPDBSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('ppdb-name').value;
+            
+            // Set dynamic user details inside response box
+            document.getElementById('ppdb-success-name').innerText = name;
+            document.getElementById('ppdb-success-msg').classList.remove('hidden');
+
+            // Reset Form Fields
+            document.getElementById('ppdb-form').reset();
+
+            // Smooth scroll to success message
+            setTimeout(() => {
+                document.getElementById('ppdb-success-msg').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        // ================= CMS PANEL FUNCTIONALITIES =================
+
+        function toggleCMSFormFields(type) {
+            const imageField = document.getElementById('cms-image-field');
+            if (type === 'pengumuman') {
+                imageField.classList.add('hidden');
+            } else {
+                imageField.classList.remove('hidden');
+            }
+        }
+
+        // Publish Content from CMS Dashboard
+        function handleCMSPublish(event) {
+            event.preventDefault();
+            const type = document.getElementById('cms-type').value;
+            const title = document.getElementById('cms-title').value;
+            const content = document.getElementById('cms-content').value;
+            const image = document.getElementById('cms-image').value || 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?q=80&w=600&auto=format&fit=crop';
+            
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            if (type === 'berita') {
+                const newBerita = {
+                    id: 'news-' + Date.now(),
+                    title,
+                    date: dateStr,
+                    category: "Info Sekolah",
+                    content,
+                    image
+                };
+                newsData.unshift(newBerita);
+            } else {
+                const newAnn = {
+                    id: 'ann-' + Date.now(),
+                    title,
+                    date: dateStr,
+                    content
+                };
+                announcementsData.unshift(newAnn);
+            }
+
+            // Update UI
+            renderNews();
+            renderAnnouncements();
+            renderCMSLists();
+
+            // Clear form
+            document.getElementById('cms-title').value = '';
+            document.getElementById('cms-content').value = '';
+
+            // Interactive response box replacement for alert()
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'fixed bottom-5 right-5 z-50 bg-emerald-600 text-white px-6 py-3.5 rounded-xl shadow-lg font-bold text-sm flex items-center gap-2';
+            messageDiv.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5"></i> Konten Berhasil Diterbitkan!`;
+            document.body.appendChild(messageDiv);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+        }
+
+        // Delete content from CMS
+        function deleteContent(type, id) {
+            if (type === 'berita') {
+                newsData = newsData.filter(n => n.id !== id);
+            } else {
+                announcementsData = announcementsData.filter(a => a.id !== id);
+            }
+            renderNews();
+            renderAnnouncements();
+            renderCMSLists();
+        }
+
+        // Render Lists inside Admin CMS
+        function renderCMSLists() {
+            // Count badges
+            document.getElementById('cms-news-count').innerText = `${newsData.length} Berita`;
+            document.getElementById('cms-ann-count').innerText = `${announcementsData.length} Pengumuman`;
+
+            // News CMS List
+            const cmsNewsContainer = document.getElementById('cms-news-list');
+            cmsNewsContainer.innerHTML = '';
+            
+            if(newsData.length === 0) {
+                cmsNewsContainer.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Belum ada berita.</p>`;
+            } else {
+                newsData.forEach(item => {
+                    const row = `
+                        <div class="py-4 flex items-center justify-between gap-4">
+                            <div class="min-w-0 flex-grow">
+                                <h5 class="text-sm font-bold text-slate-900 truncate">${item.title}</h5>
+                                <p class="text-[10px] text-slate-400 mt-0.5">${item.date} &bull; ${item.category}</p>
+                            </div>
+                            <button onclick="deleteContent('berita', '${item.id}')" class="p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-all flex-shrink-0">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    `;
+                    cmsNewsContainer.insertAdjacentHTML('beforeend', row);
+                });
+            }
+
+            // Announcement CMS List
+            const cmsAnnContainer = document.getElementById('cms-ann-list');
+            cmsAnnContainer.innerHTML = '';
+
+            if(announcementsData.length === 0) {
+                cmsAnnContainer.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Belum ada pengumuman.</p>`;
+            } else {
+                announcementsData.forEach(item => {
+                    const row = `
+                        <div class="py-4 flex items-center justify-between gap-4">
+                            <div class="min-w-0 flex-grow">
+                                <h5 class="text-sm font-bold text-slate-900 truncate">${item.title}</h5>
+                                <p class="text-[10px] text-slate-400 mt-0.5">${item.date}</p>
+                            </div>
+                            <button onclick="deleteContent('announcement', '${item.id}')" class="p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-all flex-shrink-0">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    `;
+                    cmsAnnContainer.insertAdjacentHTML('beforeend', row);
+                });
+            }
+            lucide.createIcons();
+        }
+
+        // Read/View News Detail Helper
+        function viewNewsDetail(id) {
+            const newsItem = newsData.find(n => n.id === id);
+            if(newsItem) {
+                // Interactive pop-up overlay box (Replacement of standard alert)
+                const overlay = document.createElement('div');
+                overlay.className = "fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4";
+                overlay.id = "news-detail-modal";
+                overlay.onclick = function(e) {
+                    if (e.target.id === "news-detail-modal") overlay.remove();
+                };
+
+                const modal = `
+                    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] overflow-y-auto custom-scrollbar shadow-2xl border border-slate-100">
+                        <img class="w-full h-64 object-cover" src="${newsItem.image}" alt="Berita" onerror="this.src='https://placehold.co/600x300/3b82f6/ffffff?text=Berita'">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full uppercase tracking-wider">${newsItem.category}</span>
+                                <span class="text-xs text-slate-400 font-medium">${newsItem.date}</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-4 leading-snug">${newsItem.title}</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed whitespace-pre-line">${newsItem.content}</p>
+                            
+                            <div class="mt-8 pt-4 border-t border-slate-100 flex justify-end">
+                                <button onclick="document.getElementById('news-detail-modal').remove()" class="px-5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-all">Tutup Berita</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                overlay.innerHTML = modal;
+                document.body.appendChild(overlay);
+            }
+        }
+    </script>
+</body>
+</html>
