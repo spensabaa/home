@@ -24,7 +24,7 @@ function renderNavbar() {
             <a href="${basePrefix}akademik.html" class="hover:text-amber-300 transition">Akademik</a>
             <a href="${basePrefix}kesiswaan.html" class="hover:text-amber-300 transition">Kesiswaan</a>
             <a href="${basePrefix}layanan.html" class="hover:text-amber-300 transition">Layanan Publik</a>
-            
+            <a href="${basePrefix}respon.html" class="hover:text-amber-300 transition">respon</a>
           </div>
         </div>
       </div>
