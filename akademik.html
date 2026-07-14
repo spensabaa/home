@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Akademik & Unduhan Dokumen - SMPN 1 Bangsal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+  <!-- Tempat Menampung Navbar Otomatis -->
+  <div id="navbar-container"></div>
+
+  <!-- HERO HEADER -->
+  <section class="bg-gradient-to-r from-blue-900 to-indigo-950 text-white py-16 px-4 text-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    <div class="relative z-10 max-w-4xl mx-auto">
+      <span class="text-amber-400 font-bold uppercase tracking-wider text-xs bg-amber-400/10 px-3 py-1 rounded-full">Pusat Informasi Akademik</span>
+      <h1 class="text-3xl md:text-5xl font-extrabold mt-3 tracking-tight">Akademik & Unduhan</h1>
+      <p class="text-slate-300 mt-3 text-sm md:text-base max-w-xl mx-auto">Akses mudah ke kalender pendidikan, kurikulum, modul pembelajaran, dan dokumen resmi sekolah.</p>
+    </div>
+  </section>
+
+  <!-- KONTEN UTAMA -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full space-y-12">
+    
+    <!-- PENGANTAR AKADEMIK (INFORMASI UMUM) -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+      <div class="lg:col-span-2 bg-white rounded-2xl border p-6 md:p-8 flex flex-col justify-between">
+        <div class="space-y-4">
+          <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-2 h-6 bg-blue-600 rounded-full inline-block"></span>
+            Kurikulum Merdeka
+          </h2>
+          <p class="text-slate-600 leading-relaxed text-sm md:text-base">
+            SMPN 1 Bangsal berkomitmen penuh dalam menyelenggarakan pendidikan berkualitas melalui penerapan <strong>Kurikulum Merdeka</strong>. Kami berfokus pada pengembangan karakter profil pelajar Pancasila, pembelajaran yang berdiferensiasi, serta pemanfaatan teknologi informasi untuk mendukung proses belajar mengajar yang efektif dan menyenangkan.
+          </p>
+        </div>
+        <div class="border-t pt-4 mt-6 flex flex-wrap gap-4 text-xs text-slate-500 font-medium">
+          <span>📅 Tahun Ajaran: 2026/2027</span>
+          <span>🏫 Status: Mandiri Berubah</span>
+        </div>
+      </div>
+
+      <!-- KOTAK INFORMASI JADWAL PENTING -->
+      <div class="bg-gradient-to-br from-blue-900 to-indigo-950 text-white rounded-2xl p-6 flex flex-col justify-between shadow-lg shadow-blue-950/20">
+        <div>
+          <h3 class="font-bold text-lg text-amber-400 mb-4 flex items-center gap-2">
+            🔔 Agenda Akademik Terdekat
+          </h3>
+          <ul class="space-y-3 text-sm text-slate-300">
+            <li class="border-b border-white/10 pb-2">
+              <span class="block text-xs text-amber-300 font-semibold">13 Juli 2026</span>
+              Hari Pertama Masuk Sekolah & MPLS
+            </li>
+            <li class="border-b border-white/10 pb-2">
+              <span class="block text-xs text-amber-300 font-semibold">17 Agustus 2026</span>
+              Upacara HUT RI ke-81
+            </li>
+            <li>
+              <span class="block text-xs text-amber-300 font-semibold">September 2026</span>
+              Asesmen Nasional Berbasis Komputer (ANBK)
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- BAGIAN UNDUHAN DOKUMEN -->
+    <section class="space-y-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b pb-4">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900">Dokumen & Arsip Akademik</h2>
+          <p class="text-slate-500 text-sm mt-1">Cari dan unduh dokumen resmi yang Anda butuhkan di bawah ini.</p>
+        </div>
+        
+        <!-- Search Bar Sederhana -->
+        <div class="relative w-full md:w-64">
+          <input id="search-input" type="text" placeholder="Cari nama dokumen..." class="w-full border rounded-lg pl-3 pr-10 py-2 text-sm focus:ring-2 focus:ring-blue-500 bg-white">
+          <span class="absolute right-3 top-2.5 text-slate-400 text-sm">🔍</span>
+        </div>
+      </div>
+
+      <!-- FILTER KATEGORI (DI-GENERATE DINAMIS) -->
+      <div id="filter-container" class="flex flex-wrap gap-2">
+        <!-- Tombol "Semua" default -->
+        <button onclick="saringKategori('semua')" id="btn-semua" class="filter-btn px-4 py-2 text-xs font-semibold rounded-full shadow-sm border bg-blue-600 text-white transition">
+          Semua Dokumen
+        </button>
+      </div>
+
+      <!-- FEEDBACK LOADING ATAU ERROR -->
+      <div id="loading-dokumen" class="text-center py-16 font-medium text-slate-400">
+        Menghubungkan ke pusat arsip dokumen...
+      </div>
+
+      <!-- LIST DOKUMEN -->
+      <div id="dokumen-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+        <!-- Loop data dokumen akan masuk ke sini via JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Tempat Menampung Footer Otomatis -->
+  <div id="footer-container"></div>
+
+  <!-- LOAD SCRIPTS UTAMA -->
+  <script src="api.js"></script>
+  <script src="components.js"></script>
+  
+  <script>
+    let seluruhDokumen = [];
+    let kategoriAktif = "semua";
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      muatDokumenAkademik();
+      
+      // Event listener untuk kotak pencarian
+      document.getElementById("search-input").addEventListener("input", filterDanRender);
+    });
+
+    // 1. Ambil Data dari sheet 'dokumen_akademik'
+    async function muatDokumenAkademik() {
+      const loading = document.getElementById("loading-dokumen");
+      const listContainer = document.getElementById("dokumen-list");
+
+      try {
+        const res = await CMS_API.read("dokumen_akademik");
+        if (res.status === "success" && res.data.length > 0) {
+          seluruhDokumen = res.data;
+          
+          loading.classList.add("hidden");
+          listContainer.classList.remove("hidden");
+
+          // Jalankan fungsi pembuatan tombol filter secara dinamis
+          buatTombolFilter(seluruhDokumen);
+
+          // Tampilkan semua data saat pertama kali dimuat
+          filterDanRender();
+        } else {
+          loading.innerText = "Belum ada arsip dokumen yang diunggah di database.";
+        }
+      } catch (err) {
+        console.error("Gagal memuat dokumen:", err);
+        loading.innerHTML = `<span class="text-red-500">Terjadi gangguan jaringan saat memuat berkas arsip.</span>`;
+      }
+    }
+
+    // 2. Generate Tombol Filter Berdasarkan Kategori yang Ada di Sheet
+    function buatTombolFilter(data) {
+      const container = document.getElementById("filter-container");
+      
+      // Ambil daftar kategori unik dari data, lalu bersihkan dari nilai kosong
+      const semuaKategori = [...new Set(data.map(item => item.kategori))].filter(Boolean);
+
+      semuaKategori.forEach(kategori => {
+        const btn = document.createElement("button");
+        btn.id = `btn-${kategori.replace(/\s+/g, '-').toLowerCase()}`;
+        btn.className = "filter-btn px-4 py-2 text-xs font-semibold rounded-full shadow-sm border bg-white hover:bg-slate-100 text-slate-700 transition";
+        btn.innerText = kategori;
+        btn.onclick = () => saringKategori(kategori, btn.id);
+        container.appendChild(btn);
+      });
+    }
+
+    // 3. Aksi Saat Tombol Filter Diklik
+    function saringKategori(kategori, buttonId = "btn-semua") {
+      kategoriAktif = kategori;
+
+      // Atur visual tombol aktif/nonaktif
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.className = "filter-btn px-4 py-2 text-xs font-semibold rounded-full shadow-sm border bg-white hover:bg-slate-100 text-slate-700 transition";
+      });
+
+      const activeBtn = document.getElementById(buttonId);
+      if (activeBtn) {
+        activeBtn.className = "filter-btn px-4 py-2 text-xs font-semibold rounded-full shadow-sm border bg-blue-600 text-white transition";
+      }
+
+      filterDanRender();
+    }
+
+    // 4. Penggabung Logika Filter Kategori + Kotak Pencarian, Lalu Merendernya ke Layar
+    function filterDanRender() {
+      const searchQuery = document.getElementById("search-input").value.toLowerCase();
+      const listContainer = document.getElementById("dokumen-list");
+
+      // Filter berdasarkan kategori
+      let hasilFilter = seluruhDokumen;
+      if (kategoriAktif !== "semua") {
+        hasilFilter = hasilFilter.filter(item => item.kategori === kategoriAktif);
+      }
+
+      // Filter berdasarkan teks pencarian (nama_dokumen)
+      if (searchQuery.trim() !== "") {
+        hasilFilter = hasilFilter.filter(item => 
+          item.nama_dokumen.toLowerCase().includes(searchQuery)
+        );
+      }
+
+      // Render hasil filter
+      if (hasilFilter.length > 0) {
+        listContainer.innerHTML = hasilFilter.map(dok => {
+          return `
+            <div class="bg-white border rounded-2xl shadow-sm p-6 hover:shadow-md transition duration-300 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-2 mb-3">
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 uppercase tracking-wide">
+                    ${dok.kategori}
+                  </span>
+                </div>
+                <!-- Judul Dokumen -->
+                <h4 class="font-bold text-slate-900 text-base line-clamp-2" title="${dok.nama_dokumen}">
+                  ${dok.nama_dokumen}
+                </h4>
+              </div>
+
+              <!-- Tombol Aksi Unduh -->
+              <div class="mt-6 border-t pt-4 flex items-center justify-between">
+                <span class="text-slate-400 text-xs">ID: ${dok.id}</span>
+                <a href="${dok.url_download}" target="_blank" class="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white px-4 py-2 rounded-xl text-xs font-bold transition">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                  </svg>
+                  Unduh Berkas
+                </a>
+              </div>
+            </div>
+          `;
+        }).join("");
+      } else {
+        listContainer.innerHTML = `
+          <div class="col-span-full text-center py-12 text-slate-400 font-medium">
+            Tidak ada berkas yang cocok dengan pencarian Anda.
+          </div>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
