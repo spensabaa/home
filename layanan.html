@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layanan Sekolah & Administrasi - SMPN 1 Bangsal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+  <!-- Tempat Menampung Navbar Otomatis -->
+  <div id="navbar-container"></div>
+
+  <!-- HERO HEADER -->
+  <section class="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white py-16 px-4 text-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    <div class="relative z-10 max-w-4xl mx-auto">
+      <span class="text-emerald-400 font-bold uppercase tracking-wider text-xs bg-emerald-400/10 px-3 py-1 rounded-full border border-emerald-400/20">Pelayanan Publik & Administrasi</span>
+      <h1 class="text-3xl md:text-5xl font-extrabold mt-3 tracking-tight">Layanan Sekolah</h1>
+      <p class="text-slate-300 mt-3 text-sm md:text-base max-w-xl mx-auto">Informasi prosedur, syarat administrasi, dan layanan daring untuk siswa, orang tua, dan alumni SMPN 1 Bangsal.</p>
+      
+      <!-- FITUR PENCARIAN -->
+      <div class="mt-8 max-w-md mx-auto relative">
+        <input type="text" id="input-cari" oninput="cariLayanan()" placeholder="Cari layanan (cth: Legalisir, Mutasi, Ijazah...)" 
+               class="w-full px-5 py-3.5 pl-12 rounded-full text-slate-800 text-sm shadow-lg focus:outline-none focus:ring-4 focus:ring-emerald-500/30 border-0">
+        <span class="absolute left-4 top-3.5 text-slate-400 text-lg">🔍</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- KONTEN UTAMA -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full space-y-10">
+    
+    <!-- FILTER KATEGORI -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b pb-6">
+      <div class="text-center sm:text-left">
+        <h2 class="text-xl font-bold text-slate-900">Daftar Layanan Tersedia</h2>
+        <p class="text-slate-500 text-xs mt-0.5">Pilih kategori atau gunakan kolom pencarian di atas.</p>
+      </div>
+      
+      <!-- Tombol Filter Dinamis -->
+      <div id="filter-container" class="flex flex-wrap justify-center gap-2">
+        <button onclick="filterKategori('semua')" id="btn-kat-semua" class="filter-btn px-4 py-2 text-xs font-semibold rounded-full shadow-sm border bg-emerald-600 text-white transition">
+          Semua Layanan
+        </button>
+      </div>
+    </div>
+
+    <!-- LOADING STATE -->
+    <div id="loading-layanan" class="text-center py-16 font-medium text-slate-400">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-emerald-500 border-t-transparent mb-2"></div>
+      <p>Mengambil data informasi layanan...</p>
+    </div>
+
+    <!-- GRID LAYANAN -->
+    <div id="layanan-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+      <!-- Loop kartu layanan masuk di sini via JS -->
+    </div>
+
+    <!-- BANTUAN LANGSUNG (CTA) -->
+    <section class="bg-gradient-to-br from-emerald-800 to-teal-900 rounded-3xl p-8 md:p-12 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8 mt-16">
+      <div class="space-y-2 text-center md:text-left max-w-xl">
+        <span class="bg-emerald-500/20 text-emerald-300 text-xs px-3 py-1 rounded-full font-semibold border border-emerald-500/30">Pusat Bantuan</span>
+        <h3 class="text-2xl font-bold">Butuh Bantuan Layanan Lainnya?</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">Jika layanan yang Anda cari tidak terdapat pada daftar di atas, silakan hubungi petugas Tata Usaha (TU) kami pada jam kerja (Senin - Jumat, 07.00 - 15.00 WIB).</p>
+      </div>
+      <a href="https://wa.me/628xxxxxxxxxx" target="_blank" class="bg-white text-emerald-900 font-bold px-6 py-3.5 rounded-full shadow-lg hover:bg-emerald-50 hover:scale-105 transition duration-300 whitespace-nowrap flex items-center gap-2 text-sm">
+        <span>💬</span> Hubungi Tata Usaha (WA)
+      </a>
+    </section>
+
+  </main>
+
+  <!-- Tempat Menampung Footer Otomatis -->
+  <div id="footer-container"></div>
+
+  <!-- LOAD SCRIPTS UTAMA -->
+  <script src="api.js"></script>
+  <script src="components.js"></script>
+  
+  <script>
+    let seluruhLayanan = [];
+    let kategoriAktif = "semua";
+    let kataKunciCari = "";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      muatDataLayanan();
+    });
+
+    async function muatDataLayanan() {
+      const loading = document.getElementById("loading-layanan");
+      const grid = document.getElementById("layanan-grid");
+
+      try {
+        // Mengambil data dari sheet bernama 'layanan'
+        const res = await CMS_API.read("layanan");
+        
+        if (res.status === "success" && res.data.length > 0) {
+          seluruhLayanan = res.data;
+          loading.classList.add("hidden");
+          grid.classList.remove("hidden");
+
+          // Buat tombol filter kategori secara otomatis
+          buatTombolFilter(seluruhLayanan);
+          
+          // Tampilkan data ke layar
+          renderLayanan();
+        } else {
+          loading.innerHTML = `<p class="text-slate-500">Belum ada informasi layanan yang dimasukkan ke dalam database.</p>`;
+        }
+      } catch (err) {
+        console.error("Gagal memuat layanan:", err);
+        loading.innerHTML = `<p class="text-red-500">Gagal memuat data layanan dari server. Silakan coba lagi nanti.</p>`;
+      }
+    }
+
+    function buatTombolFilter(data) {
+      const container = document.getElementById("filter-container");
+      const kategoriUnik = [...new Set(data.map(item => item.kategori))].filter(Boolean);
+
+      kategoriUnik.forEach(kat => {
+        const btn = document.createElement("button");
+        btn.id = `btn-kat-${kat.replace(/\s+/g, '-').toLowerCase()}`;
+        btn.className = "filter-btn px-4 py-2 text-xs font-semibold rounded-full shadow-sm border bg-white hover:bg-slate-100 text-slate-700 transition";
+        btn.innerText = kat;
+        btn.onclick = () => filterKategori(kat, btn.id);
+        container.appendChild(btn);
+      });
+    }
+
+    function filterKategori(kategori, buttonId = "btn-kat-semua") {
+      kategoriAktif = kategori;
+
+      // Update styling tombol
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.className = "filter-btn px-4 py-2 text-xs font-semibold rounded-full shadow-sm border bg-white hover:bg-slate-100 text-slate-700 transition";
+      });
+
+      const activeBtn = document.getElementById(buttonId);
+      if (activeBtn) {
+        activeBtn.className = "filter-btn px-4 py-2 text-xs font-semibold rounded-full shadow-sm border bg-emerald-600 text-white transition";
+      }
+
+      renderLayanan();
+    }
+
+    function cariLayanan() {
+      kataKunciCari = document.getElementById("input-cari").value.toLowerCase().trim();
+      renderLayanan();
+    }
+
+    function renderLayanan() {
+      const grid = document.getElementById("layanan-grid");
+      
+      // Proses filter kategori & pencarian kata kunci sekaligus
+      let hasilFilter = seluruhLayanan.filter(item => {
+        const cocokKategori = kategoriAktif === "semua" || item.kategori === kategoriAktif;
+        const cocokKataKunci = (item.nama_layanan && item.nama_layanan.toLowerCase().includes(kataKunciCari)) ||
+                               (item.deskripsi && item.deskripsi.toLowerCase().includes(kataKunciCari)) ||
+                               (item.persyaratan && item.persyaratan.toLowerCase().includes(kataKunciCari));
+        return cocokKategori && cocokKataKunci;
+      });
+
+      if (hasilFilter.length > 0) {
+        grid.innerHTML = hasilFilter.map(item => {
+          const ikon = item.ikon || "📋"; // Default ikon jika kosong
+          const persyaratan = item.persyaratan ? item.persyaratan.split("\n") : [];
+          
+          return `
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-lg hover:border-emerald-200 transition duration-300 flex flex-col justify-between group">
+              <div>
+                <div class="flex items-start justify-between gap-3 mb-4">
+                  <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-2xl group-hover:scale-110 transition duration-300 border border-emerald-100">
+                    ${ikon}
+                  </div>
+                  <span class="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">
+                    ${item.kategori || 'Umum'}
+                  </span>
+                </div>
+
+                <h3 class="font-bold text-lg text-slate-900 group-hover:text-emerald-700 transition">${item.nama_layanan}</h3>
+                <p class="text-slate-600 text-xs mt-2 leading-relaxed">${item.deskripsi || 'Tidak ada deskripsi layanan.'}</p>
+
+                ${persyaratan.length > 0 && item.persyaratan.trim() !== "" ? `
+                  <div class="mt-4 pt-4 border-t border-slate-100">
+                    <span class="text-[11px] font-semibold text-slate-800 uppercase tracking-wider block mb-2">Persyaratan / Prosedur:</span>
+                    <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside marker:text-emerald-500">
+                      ${persyaratan.map(req => `<li class="leading-normal">${req}</li>`).join("")}
+                    </ul>
+                  </div>
+                ` : ''}
+              </div>
+
+              <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-medium">
+                <div class="flex items-center gap-1.5 text-slate-500">
+                  <span>⏱️</span>
+                  <span>${item.waktu_pelayanan || 'Sesuai jam kerja'}</span>
+                </div>
+
+                ${item.link_form ? `
+                  <a href="${item.link_form}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3.5 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1 text-[11px]">
+                    <span>Akses Formulir</span> ↗
+                  </a>
+                ` : `
+                  <span class="text-slate-400 text-[11px] italic">Layanan Offline</span>
+                `}
+              </div>
+            </div>
+          `;
+        }).join("");
+      } else {
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-12 bg-white rounded-2xl border border-dashed border-slate-200">
+            <span class="text-3xl block mb-2">🏷️</span>
+            <p class="text-slate-700 font-medium text-sm">Layanan tidak ditemukan.</p>
+            <p class="text-slate-400 text-xs mt-1">Coba gunakan kata kunci pencarian yang lain atau pilih kategori "Semua Layanan".</p>
+          </div>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
