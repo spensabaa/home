@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil Sekolah - SMPN 1 Bangsal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+  <!-- Tempat Menampung Navbar Otomatis -->
+  <div id="navbar-container"></div>
+
+  <!-- HERO HEADER -->
+  <section class="bg-gradient-to-r from-blue-900 to-indigo-950 text-white py-16 px-4 text-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    <div class="relative z-10 max-w-4xl mx-auto">
+      <span class="text-amber-400 font-bold uppercase tracking-wider text-xs bg-amber-400/10 px-3 py-1 rounded-full">Kenali Lebih Dekat</span>
+      <h1 class="text-3xl md:text-5xl font-extrabold mt-3 tracking-tight">Profil & Direktori Guru</h1>
+      <p class="text-slate-300 mt-3 text-sm md:text-base max-w-xl mx-auto">Sejarah, visi-misi, serta jajaran pendidik hebat di SMPN 1 Bangsal.</p>
+    </div>
+  </section>
+
+  <!-- SEJARAH & SAMBUTAN SEKSI -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full space-y-16">
+    
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+      <!-- Kolom Kiri: Detail Identitas Ringkas -->
+      <div class="bg-white rounded-2xl shadow-sm border p-6 space-y-4">
+        <h3 class="font-bold text-lg text-slate-900 border-b pb-2">Informasi Lembaga</h3>
+        <div class="space-y-3 text-sm">
+          <div>
+            <span class="text-slate-400 block text-xs uppercase font-semibold">Nama Sekolah</span>
+            <span id="info-nama" class="font-medium text-slate-800">SMPN 1 Bangsal</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block text-xs uppercase font-semibold">NPSN</span>
+            <span id="info-npsn" class="font-medium text-slate-800">-</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block text-xs uppercase font-semibold">Alamat</span>
+            <span id="info-alamat" class="font-medium text-slate-800">-</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block text-xs uppercase font-semibold">Akreditasi</span>
+            <span id="info-akreditasi" class="inline-block bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded text-xs mt-1">A</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kolom Kanan: Sejarah / Sambutan -->
+      <div class="lg:grid-cols-2 lg:col-span-2 space-y-6">
+        <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+          <span class="w-2 h-6 bg-blue-600 rounded-full inline-block"></span>
+          Sepatah Kata & Sejarah Singkat
+        </h2>
+        <div id="loading-identitas" class="text-slate-400 italic text-sm">Memuat data sejarah...</div>
+        <p id="teks-sejarah" class="text-slate-600 leading-relaxed text-justify hidden">
+          <!-- Diisi otomatis dari sheet 'identitas_sekolah' kunci 'Sejarah' -->
+        </p>
+      </div>
+    </section>
+
+    <!-- VISI & MISI SEKSI -->
+    <section class="bg-gradient-to-b from-blue-50 to-white rounded-3xl p-8 md:p-12 border border-blue-100 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="space-y-4">
+        <div class="bg-blue-600 text-white w-12 h-12 rounded-xl flex items-center justify-center shadow-md shadow-blue-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-slate-900">Visi Sekolah</h3>
+        <p id="teks-visi" class="text-slate-600 italic">Memuat data visi...</p>
+      </div>
+
+      <div class="space-y-4">
+        <div class="bg-amber-500 text-white w-12 h-12 rounded-xl flex items-center justify-center shadow-md shadow-amber-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16 h.01"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-slate-900">Misi Sekolah</h3>
+        <div id="teks-misi" class="text-slate-600 space-y-2 text-sm md:text-base">
+          <p>Memuat data misi...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIREKTORI GURU & TENDIK -->
+    <section class="space-y-8">
+      <div class="text-center max-w-xl mx-auto">
+        <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Guru & Tenaga Kependidikan</h2>
+        <p class="text-slate-500 text-sm mt-2">Mengenal jajaran pendidik profesional pembimbing siswa-siswi SMPN 1 Bangsal.</p>
+      </div>
+
+      <!-- Loading GTK -->
+      <div id="loading-gtk" class="text-center py-12 font-medium text-slate-400">Menghubungkan ke direktori guru...</div>
+      
+      <!-- Grid Penampung Kartu Guru -->
+      <div id="gtk-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 hidden">
+        <!-- Loop kartu akan masuk ke sini via JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Tempat Menampung Footer Otomatis -->
+  <div id="footer-container"></div>
+
+  <!-- LOAD SCRIPTS UTAMA -->
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/components.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      // Jalankan fungsi pararel agar loading terasa cepat
+      muatDataIdentitas();
+      muatDirektoriGuru();
+    });
+
+    // 1. Fungsi Ambil Data dari sheet 'identitas_sekolah'
+    async function muatDataIdentitas() {
+      try {
+        const res = await CMS_API.read("identitas_sekolah");
+        if (res.status === "success" && res.data) {
+          const info = res.data;
+          
+          // Mengubah data teks di halaman (Gunakan fallback teks jika datanya kosong di sheet)
+          document.getElementById("info-nama").innerText = info.Nama_Sekolah || "SMPN 1 Bangsal";
+          document.getElementById("info-npsn").innerText = info.NPSN || "-";
+          document.getElementById("info-alamat").innerText = info.Alamat || "-";
+          
+          if(info.Akreditasi) {
+            document.getElementById("info-akreditasi").innerText = info.Akreditasi;
+          }
+
+          // Set Sejarah
+          document.getElementById("loading-identitas").classList.add("hidden");
+          const elementSejarah = document.getElementById("teks-sejarah");
+          elementSejarah.innerText = info.Sejarah || "Sejarah sekolah belum diisi di database CMS.";
+          elementSejarah.classList.remove("hidden");
+
+          // Set Visi & Misi
+          document.getElementById("teks-visi").innerText = `"${info.Visi || 'Belum diatur'}"`;
+          
+          // Jika misi ditulis menggunakan pemisah baris baru atau koma di spreadsheet, kita pecah jadi list
+          if (info.Misi) {
+            const listMisi = info.Misi.split("\n"); // Memecah berdasarkan enter di sel sheet
+            document.getElementById("teks-misi").innerHTML = `
+              <ol class="list-decimal list-inside space-y-1.5 text-justify">
+                ${listMisi.map(misi => `<li>${misi}</li>`).join("")}
+              </ol>
+            `;
+          } else {
+            document.getElementById("teks-misi").innerText = "Misi sekolah belum diatur.";
+          }
+        }
+      } catch (err) {
+        console.error("Gagal memuat identitas:", err);
+        document.getElementById("loading-identitas").innerText = "Gagal memuat profil data sekolah.";
+      }
+    }
+
+    // 2. Fungsi Ambil Data dari sheet 'guru_tendik'
+    async function muatDirektoriGuru() {
+      const loadingGtk = document.getElementById("loading-gtk");
+      const gridGtk = document.getElementById("gtk-grid");
+
+      try {
+        const res = await CMS_API.read("guru_tendik");
+        if (res.status === "success" && res.data.length > 0) {
+          loadingGtk.classList.add("hidden");
+          gridGtk.classList.remove("hidden");
+
+          // Render list guru ke dalam bentuk kartu HTML
+          gridGtk.innerHTML = res.data.map(guru => {
+            // Gambar default jika url_foto di sheet kosong atau tidak valid
+            const fotoGuru = guru.url_foto || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=300";
+            
+            return `
+              <div class="bg-white border rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition duration-300 text-center flex flex-col justify-between">
+                <div class="p-5">
+                  <!-- Bingkai Foto Bulat Premium -->
+                  <div class="w-24 h-24 mx-auto rounded-full overflow-hidden border-2 border-blue-100 bg-slate-100 mb-4">
+                    <img class="w-full h-full object-cover" src="${fotoGuru}" alt="${guru.nama_lengkap}" onerror="this.src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=300'">
+                  </div>
+                  <h4 class="font-bold text-slate-900 text-base line-clamp-2">${guru.nama_lengkap}</h4>
+                  <p class="text-blue-600 font-semibold text-xs mt-1 bg-blue-50 inline-block px-2.5 py-0.5 rounded-full">${guru.jabatan}</p>
+                  <p class="text-slate-500 text-xs mt-2 font-medium">Ampu: <span class="text-slate-700">${guru.mapel || '-'}</span></p>
+                </div>
+                <!-- Bagian Kaki Kartu untuk NIP -->
+                <div class="bg-slate-50 py-2.5 border-t text-[11px] text-slate-400 font-mono tracking-wider">
+                  NIP: ${guru.nip || '-'}
+                </div>
+              </div>
+            `;
+          }).join("");
+
+        } else {
+          loadingGtk.innerText = "Belum ada data guru/staf terdaftar di database.";
+        }
+      } catch (err) {
+        console.error("Gagal memuat GTK:", err);
+        loadingGtk.innerText = "Terjadi gangguan saat mengambil data direktori guru.";
+      }
+    }
+  </script>
+</body>
+</html>
