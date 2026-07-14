@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMS Admin Panel - SMPN 1 Bangsal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col text-slate-800">
+
+  <div id="navbar-container"></div>
+
+  <div class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full">
+    <div class="bg-white rounded-xl shadow p-6 mb-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">Pusat Data CMS Konten</h1>
+          <p class="text-sm text-slate-500">Pilih modul tabel di bawah untuk mulai mengelola konten website.</p>
+        </div>
+        <!-- Dropdown Selector Database Sheet -->
+        <div class="flex items-center gap-3">
+          <label class="font-semibold text-sm">Pilih Modul Sheet:</label>
+          <select id="sheet-selector" class="border rounded-lg px-4 py-2 bg-slate-50 font-medium focus:ring-2 focus:ring-blue-500">
+            <option value="hero_slider">1. Banner Slider Atas</option>
+            <option value="berita_pengumuman" selected>2. Berita & Pengumuman</option>
+            <option value="guru_tendik">3. Guru & Tenaga Kependidikan</option>
+            <option value="prestasi">4. Prestasi Sekolah</option>
+            <option value="respon_layanan">5. Kotak Masuk Layanan / SKM</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- AKSI & TABEL UTAMA -->
+    <div class="bg-white rounded-xl shadow overflow-hidden">
+      <div class="p-4 border-b bg-slate-50 flex justify-between items-center">
+        <h3 id="tabel-title" class="font-bold text-lg text-slate-700">Memuat Data Berita...</h3>
+        <button onclick="bukaModalTambah()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg text-sm shadow transition">
+          + Tambah Record Baru
+        </button>
+      </div>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr id="table-header" class="bg-slate-100 text-slate-600 uppercase text-xs tracking-wider border-b">
+              <!-- Header diisi via JavaScript -->
+            </tr>
+          </thead>
+          <tbody id="table-body" class="divide-y text-sm">
+            <tr>
+              <td class="p-8 text-center text-slate-400" colspan="100">Mengambil record data dari Google Sheets backend...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DYNAMIC FORM (TAMBAH DATA) -->
+  <div id="form-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white rounded-xl shadow-xl max-w-lg w-full overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="p-4 border-b bg-slate-50 flex justify-between items-center">
+        <h3 class="font-bold text-lg text-slate-800">Form Isian Baris Data</h3>
+        <button onclick="tutupModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl">&times;</button>
+      </div>
+      <form id="dynamic-form" onsubmit="simpanDataBaru(event)" class="p-6 space-y-4 overflow-y-auto flex-1">
+        <!-- Input fields di-generate otomatis via JS sesuai struktur kolom sheet -->
+      </form>
+      <div class="p-4 border-t bg-slate-50 flex justify-end gap-2">
+        <button onclick="tutupModal()" class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg">Batal</button>
+        <button type="submit" form="dynamic-form" class="px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow shadow-blue-200">Kirim Ke Database</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="footer-container"></div>
+
+  <!-- INTEGRASI SCRIPT UTAMA -->
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/components.js"></script>
+  <script>
+    const selector = document.getElementById("sheet-selector");
+    let strukturKolomSaatIni = [];
+
+    selector.addEventListener("change", () => muatTabelKonten(selector.value));
+    document.addEventListener("DOMContentLoaded", () => muatTabelKonten(selector.value));
+
+    // Ambil Data Sheet dari GAS & Render ke Tabel HTML
+    async class muatTabelKonten(sheetName) {
+      document.getElementById("tabel-title").innerText = `Daftar Record: ${sheetName}`;
+      const tbody = document.getElementById("table-body");
+      tbody.innerHTML = `<tr><td class="p-8 text-center text-slate-400" colspan="100">Menghubungi Google App Engine...</td></tr>`;
+
+      try {
+        const res = await CMS_API.read(sheetName);
+        if(res.status === "success" && res.data.length > 0) {
+          // Ambil kunci object JSON sebagai representasi nama kolom
+          strukturKolomSaatIni = Object.keys(res.data[0]);
+          
+          // Render Header Tabel
+          document.getElementById("table-header").innerHTML = [
+            ...strukturKolomSaatIni.map(k => `<th class="p-4 font-semibold">${k.replace('_', ' ')}</th>`),
+            `<th class="p-4 text-center">Aksi</th>`
+          ].join("");
+
+          // Render Isi Data Tabel
+          tbody.innerHTML = res.data.map(row => {
+            const primaryKey = sheetName === "respon_layanan" ? row.timestamp : row.id;
+            return `
+              <tr class="hover:bg-slate-50 border-b">
+                ${strukturKolomSaatIni.map(k => `<td class="p-4 max-w-xs truncate">${row[k] || '-'}</td>`).join("")}
+                <td class="p-4 text-center">
+                  <button onclick="hapusRecord('${sheetName}', '${primaryKey}')" class="text-red-600 font-semibold hover:underline">Hapus</button>
+                </td>
+              </tr>
+            `;
+          }).join("");
+        } else {
+          tbody.innerHTML = `<tr><td class="p-8 text-center text-slate-500" colspan="100">Sheet masih kosong atau tidak memiliki baris data.</td></tr>`;
+        }
+      } catch (err) {
+        tbody.innerHTML = `<tr><td class="p-8 text-center text-red-500" colspan="100">Error memuat data: ${err.toString()}</td></tr>`;
+      }
+    }
+
+    // Bangun Form Input Berdasarkan Struktur Kolom Sheet Terpilih
+    function bukaModalTambah() {
+      const form = document.getElementById("dynamic-form");
+      const sheetName = selector.value;
+      
+      // Filter out ID & Timestamp karena nilainya dibuat otomatis oleh Backend Apps Script
+      const fieldsInput = strukturKolomSaatIni.filter(key => key !== 'id' && key !== 'timestamp');
+
+      form.innerHTML = fieldsInput.map(key => `
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 capitalize mb-1">${key.replace(/_/g, ' ')}</label>
+          ${key === 'isi_konten' || key === 'deskripsi' || key === 'isi_pesan_atau_nilai_skm' 
+            ? `<textarea name="${key}" required rows="4" class="w-full border rounded-lg p-2.5 bg-slate-50 focus:ring-2 focus:ring-blue-500 text-sm"></textarea>`
+            : `<input type="${key === 'tanggal' || key === 'tanggal_penghargaan' ? 'date' : 'text'}" name="${key}" required class="w-full border rounded-lg p-2.5 bg-slate-50 focus:ring-2 focus:ring-blue-500 text-sm" />`
+          }
+        </div>
+      `).join("");
+
+      document.getElementById("form-modal").classList.remove("hidden");
+    }
+
+    function tutupModal() {
+      document.getElementById("form-modal").classList.add("hidden");
+    }
+
+    // Submit Handler Form Tambah Data ke API
+    async function simpanDataBaru(e) {
+      e.preventDefault();
+      const sheetName = selector.value;
+      const formData = new FormData(e.target);
+      const dataPayload = {};
+      
+      formData.forEach((value, key) => dataPayload[key] = value);
+
+      try {
+        const res = await CMS_API.create(sheetName, dataPayload);
+        if(res.status === "success") {
+          alert("Berhasil! Data baru tersimpan di Google Sheets.");
+          tutupModal();
+          muatTabelKonten(sheetName);
+        } else {
+          alert("Gagal menyimpan data: " + res.message);
+        }
+      } catch (err) {
+        alert("Terjadi masalah pada API: " + err.toString());
+      }
+    }
+
+    // Hapus Baris Data
+    async function hapusRecord(sheetName, id) {
+      if(confirm(`Apakah Anda yakin ingin menghapus record data dengan referensi ID: ${id}?`)) {
+        try {
+          const res = await CMS_API.delete(sheetName, id);
+          if(res.status === "success") {
+            alert("Data berhasil dihapus dari sistem.");
+            muatTabelKonten(sheetName);
+          }
+        } catch (err) {
+          alert("Gagal menghapus data: " + err.toString());
+        }
+      }
+    }
+  </script>
+</body>
+</html>
