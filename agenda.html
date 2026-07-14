@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Akademik & Agenda - SMPN 1 Bangsal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+  <!-- Tempat Menampung Navbar Otomatis -->
+  <div id="navbar-container"></div>
+
+  <!-- HERO HEADER -->
+  <section class="bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 text-white py-16 px-4 text-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    <div class="relative z-10 max-w-4xl mx-auto">
+      <span class="text-indigo-400 font-bold uppercase tracking-wider text-xs bg-indigo-400/10 px-3 py-1 rounded-full border border-indigo-400/20">Informasi Pembelajaran</span>
+      <h1 class="text-3xl md:text-5xl font-extrabold mt-3 tracking-tight">Akademik & Agenda Sekolah</h1>
+      <p class="text-slate-300 mt-3 text-sm md:text-base max-w-xl mx-auto">Pantau jadwal ujian, kalender akademik, kegiatan sekolah, dan agenda penting lainnya secara berkala di sini.</p>
+    </div>
+  </section>
+
+  <!-- KONTEN UTAMA -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-12">
+    
+    <!-- KOLOM KIRI: AGENDA TERDEKAT (5 COLS) -->
+    <section class="lg:col-span-5 space-y-6">
+      <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 space-y-6">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">📅</span>
+            <h2 class="text-xl font-bold text-slate-900">Agenda Terdekat</h2>
+          </div>
+          <p class="text-slate-500 text-xs mt-1">Jadwal kegiatan penting sekolah dalam waktu dekat.</p>
+        </div>
+
+        <!-- LOADING STATE AGENDA -->
+        <div id="loading-agenda" class="text-center py-8 text-slate-400 font-medium text-xs">
+          <div class="inline-block animate-spin rounded-full h-5 w-5 border-2 border-indigo-600 border-t-transparent mb-2"></div>
+          <p>Mengecek jadwal agenda mendatang...</p>
+        </div>
+
+        <!-- DAFTAR AGENDA (TIMELINE STYLE) -->
+        <div id="agenda-container" class="space-y-4 hidden">
+          <!-- Loop list agenda masuk di sini via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- KOLOM KANAN: INFORMASI AKADEMIK & TAUTAN PENTING (7 COLS) -->
+    <section class="lg:col-span-7 space-y-8">
+      <!-- Pengumuman Akademik -->
+      <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 space-y-4">
+        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <span>📢</span> Pengumuman Akademik Terbaru
+        </h2>
+        <div class="border-l-4 border-indigo-600 bg-indigo-50/50 p-4 rounded-r-2xl">
+          <span class="text-[10px] font-bold text-indigo-700 uppercase tracking-wider block">Tahun Ajaran Baru</span>
+          <h3 class="font-bold text-slate-900 text-sm mt-0.5">Persiapan KBM Tatap Muka</h3>
+          <p class="text-slate-600 text-xs mt-2 leading-relaxed">Dihimbau kepada seluruh siswa untuk mempersiapkan perlengkapan belajar, seragam lengkap, serta buku paket yang telah dibagikan oleh perpustakaan.</p>
+        </div>
+      </div>
+
+      <!-- Tautan Unduhan Dokumen -->
+      <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 space-y-4">
+        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <span>📂</span> Dokumen & Unduhan Akademik
+        </h2>
+        <p class="text-slate-500 text-xs">Silakan unduh dokumen penunjang aktivitas akademik siswa di bawah ini:</p>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <div class="p-4 rounded-2xl border border-slate-100 bg-slate-50 hover:border-indigo-200 transition flex items-center justify-between">
+            <div class="truncate pr-2">
+              <strong class="text-xs text-slate-800 block truncate">Kalender Akademik</strong>
+              <span class="text-[10px] text-slate-400">PDF • Format Resmi Sekolah</span>
+            </div>
+            <a href="#" class="bg-indigo-600 text-white rounded-lg p-2 text-xs hover:bg-indigo-700 font-semibold whitespace-nowrap">Unduh</a>
+          </div>
+
+          <div class="p-4 rounded-2xl border border-slate-100 bg-slate-50 hover:border-indigo-200 transition flex items-center justify-between">
+            <div class="truncate pr-2">
+              <strong class="text-xs text-slate-800 block truncate">Jadwal Pelajaran</strong>
+              <span class="text-[10px] text-slate-400">PDF • Kelas VII, VIII, IX</span>
+            </div>
+            <a href="#" class="bg-indigo-600 text-white rounded-lg p-2 text-xs hover:bg-indigo-700 font-semibold whitespace-nowrap">Unduh</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Tempat Menampung Footer Otomatis -->
+  <div id="footer-container"></div>
+
+  <!-- LOAD SCRIPTS UTAMA -->
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/components.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      muatAgendaTerdekat();
+    });
+
+    // ================= FUNGSI AMBIL & FILTER AGENDA =================
+    async function muatAgendaTerdekat() {
+      const loading = document.getElementById("loading-agenda");
+      const container = document.getElementById("agenda-container");
+
+      try {
+        // Mengambil data dari sheet 'agenda'
+        const res = await CMS_API.read("agenda");
+
+        if (res.status === "success" && res.data.length > 0) {
+          // Tetapkan patokan tanggal hari ini (tanpa jam agar perbandingan tanggal presisi)
+          const hariIni = new Date();
+          hariIni.setHours(0, 0, 0, 0);
+
+          // 1. Saring data: hanya ambil agenda hari ini dan masa depan
+          // 2. Urutkan: tanggal terdekat muncul paling atas
+          const agendaMendatang = res.data
+            .filter(item => {
+              if (!item.tanggal_mulai) return false;
+              const tglAgenda = new Date(item.tanggal_mulai);
+              tglAgenda.setHours(0, 0, 0, 0);
+              return tglAgenda >= hariIni; 
+            })
+            .sort((a, b) => new Date(a.tanggal_mulai) - new Date(b.tanggal_mulai));
+
+          loading.classList.add("hidden");
+          container.classList.remove("hidden");
+
+          if (agendaMendatang.length > 0) {
+            container.innerHTML = agendaMendatang.map(item => {
+              const dateObj = new Date(item.tanggal_mulai);
+              
+              // Pecah format tanggal untuk tampilan box kalender estetik
+              const hari = dateObj.toLocaleDateString('id-ID', { day: '2-digit' });
+              const bulan = dateObj.toLocaleDateString('id-ID', { month: 'short' }).toUpperCase();
+              const hariNama = dateObj.toLocaleDateString('id-ID', { weekday: 'long' });
+
+              // Tangani tanggal selesai jika ada (misal: kegiatan beberapa hari)
+              let infoTanggalSelesai = "";
+              if (item.tanggal_selesai && item.tanggal_selesai !== item.tanggal_mulai) {
+                const selesaiObj = new Date(item.tanggal_selesai);
+                const tglSelesaiSaja = selesaiObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+                infoTanggalSelesai = ` s.d ${tglSelesaiSaja}`;
+              }
+
+              // Pewarnaan kategori agenda
+              let warnaKategori = "bg-slate-100 text-slate-700";
+              const kat = item.kategori ? item.kategori.toLowerCase() : '';
+              if (kat.includes('ujian') || kat.includes('evaluasi')) {
+                warnaKategori = "bg-red-100 text-red-800";
+              } else if (kat.includes('libur')) {
+                warnaKategori = "bg-amber-100 text-amber-800";
+              } else if (kat.includes('kegiatan') || kat.includes('event')) {
+                warnaKategori = "bg-emerald-100 text-emerald-800";
+              }
+
+              return `
+                <div class="flex items-start gap-4 p-4 rounded-2xl border border-slate-100 hover:border-indigo-100 hover:bg-slate-50/50 transition duration-300">
+                  <!-- BADGE KALENDER KIRI -->
+                  <div class="flex-shrink-0 w-14 h-16 bg-gradient-to-b from-indigo-600 to-indigo-800 text-white rounded-xl shadow-sm flex flex-col items-center justify-center overflow-hidden">
+                    <span class="text-[9px] font-bold tracking-widest uppercase opacity-80 pt-1">${bulan}</span>
+                    <span class="text-xl font-black leading-none pb-1">${hari}</span>
+                  </div>
+
+                  <!-- DETIL AGENDA KANAN -->
+                  <div class="flex-1 space-y-1">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <span class="text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${warnaKategori}">
+                        ${item.kategori || 'Umum'}
+                      </span>
+                    </div>
+                    
+                    <h3 class="font-bold text-slate-900 text-sm leading-tight">${item.nama_kegiatan}</h3>
+                    
+                    <p class="text-[11px] text-slate-600 leading-relaxed">${item.deskripsi || ''}</p>
+
+                    <!-- METADATA (TEMPAT / WAKTU) -->
+                    <div class="flex flex-wrap gap-x-3 gap-y-1 text-[10px] text-slate-400 font-medium pt-1">
+                      <div class="flex items-center gap-1">
+                        <span>⏰</span>
+                        <span>${hariNama}${infoTanggalSelesai} (${item.waktu || 'Selesai'})</span>
+                      </div>
+                      ${item.tempat ? `
+                        <div class="flex items-center gap-1">
+                          <span>📍</span>
+                          <span class="truncate max-w-[150px]">${item.tempat}</span>
+                        </div>
+                      ` : ''}
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join("");
+          } else {
+            container.innerHTML = `
+              <div class="text-center py-8 text-slate-400">
+                <span class="text-2xl block mb-2">🎉</span>
+                <p class="text-xs font-semibold">Tidak ada agenda sekolah terdekat dalam waktu dekat.</p>
+              </div>
+            `;
+          }
+        } else {
+          loading.innerText = "Gagal memuat daftar agenda sekolah.";
+        }
+      } catch (err) {
+        console.error("Gagal melacak agenda:", err);
+        loading.innerText = "Terjadi gangguan jaringan saat memuat agenda.";
+      }
+    }
+  </script>
+</body>
+</html>
