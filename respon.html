@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Respon & Pelacakan Layanan - SMPN 1 Bangsal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+  <!-- Tempat Menampung Navbar Otomatis -->
+  <div id="navbar-container"></div>
+
+  <!-- HERO HEADER -->
+  <section class="bg-gradient-to-r from-teal-900 via-emerald-900 to-slate-900 text-white py-14 px-4 text-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    <div class="relative z-10 max-w-4xl mx-auto">
+      <span class="text-teal-400 font-bold uppercase tracking-wider text-xs bg-teal-400/10 px-3 py-1 rounded-full border border-teal-400/20">Layanan Responsif & Transparan</span>
+      <h1 class="text-3xl md:text-5xl font-extrabold mt-3 tracking-tight">Pelacakan & Respon Layanan</h1>
+      <p class="text-slate-300 mt-3 text-sm md:text-base max-w-xl mx-auto">Pantau status pengajuan dokumen Anda secara real-time atau kirimkan umpan balik untuk membantu kami meningkatkan kualitas layanan.</p>
+    </div>
+  </section>
+
+  <!-- KONTEN UTAMA -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-12">
+    
+    <!-- KOLOM KIRI: CEK STATUS LAYANAN (7 COLS) -->
+    <section class="lg:col-span-7 space-y-6">
+      <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 space-y-6">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span>🔍</span> Lacak Status Pengajuan
+          </h2>
+          <p class="text-slate-500 text-xs mt-1">Masukkan ID Pengajuan yang Anda dapatkan saat melakukan registrasi layanan offline maupun online.</p>
+        </div>
+
+        <!-- Input Form Pencarian ID -->
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input type="text" id="input-ticket" placeholder="Contoh: REG-2026-001" 
+                 class="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+          <button onclick="lacakPengajuan()" class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-6 py-3 rounded-xl shadow-sm text-sm transition flex items-center justify-center gap-2">
+            <span>Cari Data</span> ➔
+          </button>
+        </div>
+
+        <!-- AREA HASIL PELACAKAN -->
+        <div id="loading-lacak" class="hidden text-center py-8">
+          <div class="inline-block animate-spin rounded-full h-6 w-6 border-2 border-teal-500 border-t-transparent mb-2"></div>
+          <p class="text-slate-400 text-xs">Mencari data pengajuan Anda...</p>
+        </div>
+
+        <div id="hasil-lacak" class="hidden space-y-5 border-t pt-6">
+          <!-- Hasil dari JS dimasukkan ke sini -->
+        </div>
+      </div>
+    </section>
+
+    <!-- KOLOM KANAN: KIRIM FEEDBACK & ULASAN (5 COLS) -->
+    <section class="lg:col-span-5 space-y-6">
+      <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 space-y-6">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span>✍️</span> Kirim Ulasan / Pengaduan
+          </h2>
+          <p class="text-slate-500 text-xs mt-1">Penilaian Anda sangat berharga demi kemajuan kualitas pelayanan SMPN 1 Bangsal.</p>
+        </div>
+
+        <form id="form-feedback" onsubmit="kirimFeedback(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Nama Lengkap</label>
+            <input type="text" id="fb-nama" required placeholder="Nama Anda atau anonim" 
+                   class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Status Pengaju</label>
+            <select id="fb-peran" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+              <option value="Siswa">Siswa Aktif</option>
+              <option value="Orang Tua">Orang Tua / Wali Siswa</option>
+              <option value="Alumni">Alumni</option>
+              <option value="Umum">Masyarakat Umum</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Tingkat Kepuasan Layanan</label>
+            <div class="grid grid-cols-4 gap-2 text-center">
+              <label class="border rounded-xl p-2 cursor-pointer hover:bg-slate-50 block transition [&:has(input:checked)]:border-emerald-500 [&:has(input:checked)]:bg-emerald-50">
+                <input type="radio" name="fb-kepuasan" value="Sangat Puas" required class="sr-only">
+                <span class="text-lg block">🌟</span>
+                <span class="text-[10px] font-medium text-slate-600">Sangat Puas</span>
+              </label>
+              <label class="border rounded-xl p-2 cursor-pointer hover:bg-slate-50 block transition [&:has(input:checked)]:border-teal-500 [&:has(input:checked)]:bg-teal-50">
+                <input type="radio" name="fb-kepuasan" value="Puas" class="sr-only">
+                <span class="text-lg block">😊</span>
+                <span class="text-[10px] font-medium text-slate-600">Puas</span>
+              </label>
+              <label class="border rounded-xl p-2 cursor-pointer hover:bg-slate-50 block transition [&:has(input:checked)]:border-amber-500 [&:has(input:checked)]:bg-amber-50">
+                <input type="radio" name="fb-kepuasan" value="Cukup" class="sr-only">
+                <span class="text-lg block">😐</span>
+                <span class="text-[10px] font-medium text-slate-600">Cukup</span>
+              </label>
+              <label class="border rounded-xl p-2 cursor-pointer hover:bg-slate-50 block transition [&:has(input:checked)]:border-rose-500 [&:has(input:checked)]:bg-rose-50">
+                <input type="radio" name="fb-kepuasan" value="Kurang" class="sr-only">
+                <span class="text-lg block">😞</span>
+                <span class="text-[10px] font-medium text-slate-600">Kurang</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Isi Ulasan / Laporan Pengaduan</label>
+            <textarea id="fb-pesan" required rows="4" placeholder="Tuliskan ulasan atau detail pengaduan Anda di sini..." 
+                      class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+          </div>
+
+          <button type="submit" id="btn-submit-fb" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl shadow-sm text-sm transition">
+            Kirim Respon ➔
+          </button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Tempat Menampung Footer Otomatis -->
+  <div id="footer-container"></div>
+
+  <!-- LOAD SCRIPTS UTAMA -->
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/components.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Deteksi jika user datang dengan parameter sukses kirim form dari Google Form / URL redirect
+      const urlParams = new URLSearchParams(window.location.search);
+      const ticketId = urlParams.get('id');
+      const status = urlParams.get('status');
+
+      if (ticketId) {
+        document.getElementById("input-ticket").value = ticketId;
+        lacakPengajuan();
+      }
+
+      if (status === 'sukses') {
+        alert("Terima kasih! Pengajuan Anda berhasil tercatat. Silakan simpan dan lacak ID Pengajuan Anda secara berkala di halaman ini.");
+      }
+    });
+
+    // ================= 1. FUNGSI PELACAKAN STATUS LAYANAN =================
+    async function lacakPengajuan() {
+      const ticketInput = document.getElementById("input-ticket").value.trim();
+      const loading = document.getElementById("loading-lacak");
+      const hasil = document.getElementById("hasil-lacak");
+
+      if (!ticketInput) {
+        alert("Silakan masukkan ID Pengajuan terlebih dahulu!");
+        return;
+      }
+
+      loading.classList.remove("hidden");
+      hasil.classList.add("hidden");
+
+      try {
+        // Mengambil data dari sheet bernama 'pengajuan_layanan'
+        const res = await CMS_API.read("pengajuan_layanan");
+        loading.classList.add("hidden");
+
+        if (res.status === "success" && res.data.length > 0) {
+          // Cari baris yang kolom ID-nya cocok (misal nama kolomnya 'id_pengajuan')
+          const dataPengajuan = res.data.find(item => 
+            String(item.id_pengajuan).toLowerCase() === ticketInput.toLowerCase()
+          );
+
+          if (dataPengajuan) {
+            hasil.classList.remove("hidden");
+            
+            // Penentuan Warna Status Badge
+            let warnaBadge = "bg-slate-100 text-slate-700";
+            let ikonStatus = "⏳";
+            
+            const statusBersih = dataPengajuan.status ? dataPengajuan.status.toLowerCase() : 'pending';
+            
+            if (statusBersih === "selesai") {
+              warnaBadge = "bg-emerald-100 text-emerald-800 border border-emerald-200";
+              ikonStatus = "✅";
+            } else if (statusBersih === "proses" || statusBersih === "diproses") {
+              warnaBadge = "bg-blue-100 text-blue-800 border border-blue-200";
+              ikonStatus = "⚙️";
+            } else if (statusBersih === "ditolak") {
+              warnaBadge = "bg-rose-100 text-rose-800 border border-rose-200";
+              ikonStatus = "❌";
+            }
+
+            hasil.innerHTML = `
+              <div class="bg-slate-50 rounded-2xl p-5 border border-slate-100 space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                  <div>
+                    <span class="text-[10px] text-slate-400 block font-semibold uppercase">ID Pengajuan</span>
+                    <strong class="text-base text-teal-800">${dataPengajuan.id_pengajuan}</strong>
+                  </div>
+                  <div class="flex items-center gap-1.5 ${warnaBadge} text-xs font-bold px-3 py-1.5 rounded-full uppercase">
+                    <span>${ikonStatus}</span>
+                    <span>${dataPengajuan.status || 'Pending'}</span>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-2 border-t">
+                  <div>
+                    <span class="text-slate-400 block mb-0.5">Nama Pemohon:</span>
+                    <span class="font-bold text-slate-800 text-sm">${dataPengajuan.nama_pemohon || '-'}</span>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 block mb-0.5">Jenis Layanan:</span>
+                    <span class="font-bold text-slate-800 text-sm">${dataPengajuan.jenis_layanan || '-'}</span>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 block mb-0.5">Tanggal Pengajuan:</span>
+                    <span class="font-semibold text-slate-700">${dataPengajuan.tanggal_pengajuan ? new Date(dataPengajuan.tanggal_pengajuan).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) : '-'}</span>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 block mb-0.5">Estimasi Selesai:</span>
+                    <span class="font-semibold text-slate-700">${dataPengajuan.estimasi_selesai || 'Menunggu Verifikasi'}</span>
+                  </div>
+                </div>
+
+                ${dataPengajuan.catatan_petugas ? `
+                  <div class="bg-amber-50/50 border border-amber-100 rounded-xl p-3.5 text-xs text-amber-900">
+                    <span class="font-bold block mb-1">📢 Catatan Petugas:</span>
+                    <p class="leading-relaxed">${dataPengajuan.catatan_petugas}</p>
+                  </div>
+                ` : ''}
+              </div>
+            `;
+          } else {
+            hasil.classList.remove("hidden");
+            hasil.innerHTML = `
+              <div class="bg-rose-50 text-rose-800 p-4 rounded-xl text-xs border border-rose-100 text-center font-medium">
+                ⚠️ ID Pengajuan "${ticketInput}" tidak terdaftar di database kami. Pastikan pengetikan ID sudah benar atau hubungi Tata Usaha jika kendala berlanjut.
+              </div>
+            `;
+          }
+        } else {
+          alert("Gagal membaca database pengajuan.");
+        }
+      } catch (err) {
+        console.error(err);
+        loading.classList.add("hidden");
+        alert("Ada kesalahan teknis saat melacak pengajuan Anda.");
+      }
+    }
+
+    // ================= 2. FUNGSI KIRIM FEEDBACK KE BACKEND =================
+    async function kirimFeedback(event) {
+      event.preventDefault();
+      
+      const btnSubmit = document.getElementById("btn-submit-fb");
+      const nama = document.getElementById("fb-nama").value;
+      const peran = document.getElementById("fb-peran").value;
+      const kepuasanInput = document.querySelector('input[name="fb-kepuasan"]:checked');
+      const ulasan = document.getElementById("fb-pesan").value;
+
+      if (!kepuasanInput) {
+        alert("Silakan pilih tingkat kepuasan layanan terlebih dahulu!");
+        return;
+      }
+
+      const tingkatKepuasan = kepuasanInput.value;
+
+      btnSubmit.innerText = "Mengirim Respon...";
+      btnSubmit.disabled = true;
+
+      // Data JSON yang akan dikirim ke backend Google Sheets
+      const payload = {
+        tanggal: new Date().toISOString(),
+        nama: nama,
+        peran: peran,
+        kepuasan: tingkatKepuasan,
+        ulasan: ulasan
+      };
+
+      try {
+        // Mengirimkan payload ke tab sheet 'feedback_layanan'
+        const res = await CMS_API.create("feedback_layanan", payload);
+        
+        if (res.status === "success") {
+          alert("Terima kasih! Ulasan/Respon Anda berhasil terkirim dan disimpan di database sekolah.");
+          document.getElementById("form-feedback").reset();
+        } else {
+          alert("Gagal mengirim ulasan. Silakan coba beberapa saat lagi.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Kesalahan koneksi ke server. Ulasan gagal terkirim.");
+      } finally {
+        btnSubmit.innerText = "Kirim Respon ➔";
+        btnSubmit.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
