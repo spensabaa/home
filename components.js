@@ -62,7 +62,7 @@ function createBeritaCard(berita) {
         </div>
         <!-- TOMBOL BACA SELENGKAPNYA -->
         <button onclick="bukaModalBerita(${dataString})" class="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group">
-          <span>Baca Selengkapnya</span>
+          <span>Baca Selengkapnyo</span>
           <span class="group-hover:translate-x-1 transition-transform">→</span>
         </button>
       </div>
