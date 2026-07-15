@@ -60,38 +60,16 @@ function createBeritaCard(berita) {
           <h3 class="font-bold text-lg text-gray-900 mb-2 line-clamp-2">${berita.judul}</h3>
           <p class="text-gray-600 text-sm line-clamp-3 mb-4">${berita.isi_konten}</p>
         </div>
-        <button class="text-blue-600 hover:text-blue-800 font-semibold text-sm inline-flex items-center gap-1 self-start">Baca Selengkapnya &rarr;</button>
-      </div>
-    </div>
-  `;
-}
-
-// Contoh potongan fungsi yang memunculkan card berita di halaman
-const htmlBerita = dataBerita.map(item => {
-  // Ubah objek item menjadi string JSON yang aman untuk atribut HTML
-  const dataString = JSON.stringify(item).replace(/"/g, '&quot;');
-
-  return `
-    <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex flex-col justify-between">
-      <div>
-        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">${item.kategori}</span>
-        <h4 class="font-bold text-slate-900 text-base mt-3">${item.judul}</h4>
-        <p class="text-slate-500 text-xs mt-2 line-clamp-3">${item.ringkasan || item.isi}</p>
-      </div>
-      
-      <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
-        <span class="text-[11px] text-slate-400">${item.tanggal}</span>
-        
         <!-- TOMBOL BACA SELENGKAPNYA -->
         <button onclick="bukaModalBerita(${dataString})" class="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group">
           <span>Baca Selengkapnya</span>
           <span class="group-hover:translate-x-1 transition-transform">→</span>
         </button>
-
       </div>
     </div>
   `;
-}).join('');
+}
+
 
 // ============================================================================
 // FITUR POPUP (MODAL) BERITA SEKOLAH
