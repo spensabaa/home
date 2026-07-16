@@ -38,6 +38,31 @@
       </div>
     </div>
 
+    <!-- Informasi Alur Layanan -->
+    <div class="bg-indigo-900 text-white rounded-3xl p-6 md:p-8 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+       ...
+    </div>
+    <!-- ================= SEKSI BARU: TRACKING / LACAK PENGAJUAN SIPP ================= -->
+    <section class="max-w-2xl mx-auto bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 space-y-6 text-center">
+      <div class="space-y-1">
+        <span class="text-3xl">🔍</span>
+        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Lacak Status Pengisian Layanan</h2>
+        <p class="text-slate-500 text-xs max-w-sm mx-auto">Masukkan kode registrasi pengajuan Anda di bawah untuk memantau proses verifikasi dokumen.</p>
+      </div>
+
+      <form onsubmit="lacakPengajuanSIPP(event)" class="flex gap-2 max-w-md mx-auto">
+        <input type="text" id="input-lacak-id" required placeholder="Contoh: SIPP-1712345678" class="flex-1 text-xs px-4 py-3.5 rounded-2xl border border-slate-200 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition font-mono">
+        <button type="submit" id="btn-lacak" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3.5 rounded-2xl text-xs transition shadow-sm shrink-0 flex items-center gap-1.5">
+          <span>Lacak Status</span>
+        </button>
+      </form>
+
+      <!-- Wadah Hasil Pencarian (Muncul secara dinamis setelah diklik) -->
+      <div id="hasil-lacak-container" class="hidden transition-all duration-300"></div>
+    </section>
+    <!-- ============================================================================== -->
+
+    
     <!-- GRID KATALOG LAYANAN (Diberi ID agar dimuat otomatis oleh JavaScript) -->
     <div id="katalog-sipp-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <!-- Data Card Katalog akan disuntikkan secara dinamis di sini -->
