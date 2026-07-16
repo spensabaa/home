@@ -170,12 +170,19 @@ function siapkanModalSIPP() {
 
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Detail Keperluan / Keterangan Tambahan <span class="text-red-500">*</span></label>
-            <textarea id="sipp-detail" required rows="3" placeholder="Jelaskan secara singkat keperluan Anda atau tahun kelulusan..." class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition"></textarea>
+            <textarea id="sipp-detail" required rows="3" placeholder="Jelaskan secara singkat keperluan Anda..." class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition"></textarea>
+          </div>
+
+          <!-- 🛑 KODE BARU: INPUT UNTUK UNGGAH BERKAS PENDUKUNG -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Unggah Berkas Pendukung (KTP/KK/Surat Pengantar)</label>
+            <input type="file" id="sipp-file" accept=".jpg,.jpeg,.png,.pdf" class="w-full text-xs px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition bg-slate-50/50 file:mr-4 file:py-1 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+            <p class="text-[10px] text-slate-400 mt-1">Format: JPG, PNG, PDF. Maksimal ukuran berkas 2MB.</p>
           </div>
 
           <div class="bg-amber-50 border border-amber-100 rounded-xl p-3 text-[11px] text-amber-800 flex gap-2 items-start">
             <span>ℹ️</span>
-            <span>Setelah form dikirim, petugas Tata Usaha (TU) SMPN 1 Bangsal akan memproses dan menghubungi nomor WhatsApp Anda dalam 1x24 jam kerja.</span>
+            <span>Setelah form dikirim, petugas Tata Usaha (TU) SMPN 1 Bangsal akan memproses berkas Anda dalam 1x24 jam kerja.</span>
           </div>
 
           <!-- Tombol Kirim -->
@@ -191,6 +198,17 @@ function siapkanModalSIPP() {
     </div>
   `;
   document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+// ============================================================================
+// 2. FUNGSI HELPER: Mengubah Berkas Menjadi Teks Base64
+// ============================================================================
+function readAsBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 }
 
 // 4. Buka Modal
@@ -247,21 +265,21 @@ function readAsBase64(file) {
 async function kirimPengajuanSIPP(event) {
   event.preventDefault();
   
-  const btn = document.getElementById("btn-submit-sipp");
+  const btn = document.getElementById('btn-kirim-sipp');
   const teksAsli = btn.innerHTML;
   
   // 1. Ambil data teks dari form input
   const dataPengajuan = {
-    nama_pemohon: document.getElementById("input-sipp-nama").value,
-    no_wa: document.getElementById("input-sipp-wa").value,
-    jenis_layanan: document.getElementById("input-sipp-layanan").value,
-    detail_keperluan: document.getElementById("input-sipp-detail").value,
+    nama_pemohon: document.getElementById('sipp-nama').value,
+    no_wa: document.getElementById('sipp-wa').value,
+    jenis_layanan: document.getElementById('sipp-input-layanan').value,
+    detail_keperluan: document.getElementById('sipp-detail').value,
     status: "Menunggu Diproses",
     catatan_admin: "-"
   };
 
-  // 2. Cek apakah pengguna mengunggah berkas
-  const fileInput = document.getElementById("input-sipp-file");
+  // 2. Cek apakah pengguna memilih file berkas
+  const fileInput = document.getElementById('sipp-file');
   if (fileInput && fileInput.files.length > 0) {
     const fileSelected = fileInput.files[0];
     
@@ -275,7 +293,6 @@ async function kirimPengajuanSIPP(event) {
     btn.innerHTML = `<span class="inline-block animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent mr-1"></span> Memproses Berkas...`;
     
     try {
-      // Di sini fungsi HELPER di atas dipanggil
       const stringBase64 = await readAsBase64(fileSelected);
       dataPengajuan.berkasBase64 = stringBase64;
       dataPengajuan.berkasNama = fileSelected.name;
@@ -291,32 +308,28 @@ async function kirimPengajuanSIPP(event) {
 
   // 3. Proses pengiriman data ke server GAS CMS
   btn.disabled = true;
-  btn.innerHTML = `<span class="inline-block animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent mr-1"></span> Mengirim Pengajuan...`;
+  btn.innerHTML = `<span class="inline-block animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent mr-1"></span> Mengirim...`;
 
   try {
     const res = await CMS_API.create("sipp", dataPengajuan);
     
     if (res.status === "success") {
-      const idRegistrasi = res.id || dataPengajuan.id;
+      const idRegistrasi = res.id || ("SIPP-" + Date.now());
       
       alert(
         `🎉 PENGAJUAN BERHASIL DIKIRIM!\n\n` +
         `Catat & Simpan KODE REGISTRASI Anda untuk melacak status:\n` +
         `👉 ${idRegistrasi} 👈\n\n` +
-        `Berkas prasyarat berhasil diunggah ke cloud storage sistem.`
+        `Petugas Tata Usaha kami akan segera memproses berkas Anda.`
       );
       
-      // Tutup modal form dan reset inputan
       tutupModalSIPP();
-      const formSipp = document.getElementById("form-sipp");
-      if (formSipp) formSipp.reset();
-      
     } else {
-      alert("Gagal mengirim pengajuan: " + res.message);
+      alert("Gagal mengirim pengajuan. Silakan coba lagi nanti.");
     }
   } catch (err) {
-    console.error("Error Sistem SIPP:", err);
-    alert("Terjadi gangguan jaringan internet. Silakan coba sesaat lagi.");
+    console.error("Error SIPP:", err);
+    alert("Terjadi kesalahan koneksi. Pastikan internet aktif dan coba lagi.");
   } finally {
     btn.disabled = false;
     btn.innerHTML = teksAsli;
