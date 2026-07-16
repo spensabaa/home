@@ -253,8 +253,20 @@ async function kirimPengajuanSIPP(event) {
   try {
     // Memanggil API Create/Insert ke tab 'sipp'
     const res = await CMS_API.create("sipp", dataPengajuan);
+    
     if (res.status === "success") {
-      alert("🎉 Pengajuan berhasil dikirim! Petugas Tata Usaha kami akan segera menghubungi Anda melalui WhatsApp.");
+      // Ambil ID dari respon server (jika Google Script mengirimkannya balik)
+      // atau gunakan ID bawaan client jika server tidak mengirim balik.
+      const idRegistrasi = res.id || dataPengajuan.id;
+
+      // MENAMPILKAN POPUP BESERTA NOMOR REGISTRASI
+      alert(
+        `🎉 PENGAJUAN BERHASIL DIKIRIM!\n\n` +
+        `Catat & Simpan KODE REGISTRASI Anda untuk melacak status layanan:\n` +
+        `👉 ${idRegistrasi} 👈\n\n` +
+        `Petugas Tata Usaha kami akan segera menghubungi Anda melalui WhatsApp.`
+      );
+      
       tutupModalSIPP();
     } else {
       alert("Gagal mengirim pengajuan. Silakan coba lagi nanti.");
