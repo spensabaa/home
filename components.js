@@ -267,3 +267,182 @@ async function kirimPengajuanSIPP(event) {
     btn.innerHTML = teksAsli;
   }
 }
+
+// ============================================================================
+// FITUR LACAK STATUS PENGAJUAN SIPP
+// ============================================================================
+async function lacakPengajuanSIPP(event) {
+  event.preventDefault();
+  
+  const inputId = document.getElementById("input-lacak-id").value.trim();
+  const hasilContainer = document.getElementById("hasil-lacak-container");
+  const btnLacak = document.getElementById("btn-lacak");
+  const originalBtnText = btnLacak.innerHTML;
+
+  if (!inputId) {
+    alert("Silakan masukkan ID Pengajuan terlebih dahulu!");
+    return;
+  }
+
+  // 1. Ubah tombol menjadi status loading
+  btnLacak.disabled = true;
+  btnLacak.innerHTML = `<span class="inline-block animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent mr-1"></span> Mencari...`;
+  
+  // 2. Kosongkan hasil lama & tampilkan loading container
+  hasilContainer.innerHTML = `
+    <div class="text-center py-10 text-slate-400 text-xs font-medium">
+      <div class="inline-block animate-spin rounded-full h-5 w-5 border-2 border-indigo-600 border-t-transparent mb-2"></div>
+      <p>Menghubungkan ke server database...</p>
+    </div>
+  `;
+  hasilContainer.classList.remove("hidden");
+
+  try {
+    // Membaca database utama dari tab 'sipp'
+    const res = await CMS_API.read("sipp");
+    
+    if (res.status === "success" && res.data.length > 0) {
+      // Cari baris data yang ID-nya cocok (tidak sensitif huruf besar/kecil)
+      const dataKetemu = res.data.find(item => item.id && item.id.toString().trim().toLowerCase() === inputId.toLowerCase());
+      
+      if (dataKetemu) {
+        const status = dataKetemu.status ? dataKetemu.status.trim() : "Menunggu Diproses";
+        
+        // Tentukan status kelas Tailwind untuk indikator alur (1, 2, 3)
+        let step1 = "text-slate-400 border-slate-200 bg-white";
+        let step2 = "text-slate-400 border-slate-200 bg-white";
+        let step3 = "text-slate-400 border-slate-200 bg-white";
+        
+        let line1 = "bg-slate-200";
+        let line2 = "bg-slate-200";
+
+        // Pengkondisian warna berdasarkan status progres
+        if (status === "Menunggu Diproses") {
+          step1 = "text-indigo-600 border-indigo-600 bg-indigo-50 font-bold ring-4 ring-indigo-50";
+        } else if (status === "Sedang Diproses") {
+          step1 = "text-emerald-600 border-emerald-600 bg-emerald-50 font-bold";
+          line1 = "bg-emerald-500";
+          step2 = "text-indigo-600 border-indigo-600 bg-indigo-50 font-bold ring-4 ring-indigo-50";
+        } else if (status === "Selesai" || status === "Siap Diambil") {
+          step1 = "text-emerald-600 border-emerald-600 bg-emerald-50 font-bold";
+          line1 = "bg-emerald-500";
+          step2 = "text-emerald-600 border-emerald-600 bg-emerald-50 font-bold";
+          line2 = "bg-emerald-500";
+          step3 = "text-emerald-600 border-emerald-600 bg-emerald-50 font-bold ring-4 ring-emerald-50";
+        } else if (status.toLowerCase().includes("tolak") || status.toLowerCase().includes("batal")) {
+          step1 = "text-red-600 border-red-600 bg-red-50 font-bold ring-4 ring-red-50";
+        }
+
+        // Tentukan warna badge kecil status
+        let warnaBadge = "bg-slate-100 text-slate-700";
+        if (status === "Menunggu Diproses") warnaBadge = "bg-amber-50 text-amber-700 border border-amber-100";
+        else if (status === "Sedang Diproses") warnaBadge = "bg-indigo-50 text-indigo-700 border border-indigo-100";
+        else if (status === "Selesai" || status === "Siap Diambil") warnaBadge = "bg-emerald-50 text-emerald-700 border border-emerald-100";
+        else if (status.toLowerCase().includes("tolak") || status.toLowerCase().includes("batal")) warnaBadge = "bg-red-50 text-red-700 border border-red-100";
+
+        // Tampilkan hasil pencarian & rincian data ke HTML
+        hasilContainer.innerHTML = `
+          <div class="border border-slate-100 rounded-3xl p-6 md:p-8 space-y-8 bg-slate-50/40 text-left">
+            
+            <!-- HEADER LAYANAN -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/60 pb-4">
+              <div>
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">NOMOR REGISTRASI</span>
+                <strong class="text-sm font-extrabold text-slate-900">${dataKetemu.id}</strong>
+              </div>
+              <div class="sm:text-right">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">PROSES PELAYANAN</span>
+                <span class="inline-block text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${warnaBadge} mt-1">
+                  ${status}
+                </span>
+              </div>
+            </div>
+
+            <!-- VISUAL STEPPER (PROGRESS BAR) -->
+            <div class="py-2">
+              <div class="flex items-center justify-between max-w-sm mx-auto relative">
+                <!-- Garis Latar Belakang -->
+                <div class="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-1 bg-slate-100 -z-10 rounded-full"></div>
+                <!-- Garis Pengisi Aktif 1 -->
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 h-1 ${line1} -z-10 rounded-full transition-all duration-500" style="width: 50%;"></div>
+                <!-- Garis Pengisi Aktif 2 -->
+                <div class="absolute left-1/2 top-1/2 -translate-y-1/2 h-1 ${line2} -z-10 rounded-full transition-all duration-500" style="width: 50%;"></div>
+
+                <!-- Step 1: Pengajuan -->
+                <div class="flex flex-col items-center gap-2 bg-slate-50/50 px-2.5">
+                  <div class="w-9 h-9 rounded-full border-2 flex items-center justify-center text-xs transition-all duration-300 ${step1}">
+                    1
+                  </div>
+                  <span class="text-[10px] font-bold text-slate-500">Diajukan</span>
+                </div>
+
+                <!-- Step 2: Proses Verifikasi -->
+                <div class="flex flex-col items-center gap-2 bg-slate-50/50 px-2.5">
+                  <div class="w-9 h-9 rounded-full border-2 flex items-center justify-center text-xs transition-all duration-300 ${step2}">
+                    2
+                  </div>
+                  <span class="text-[10px] font-bold text-slate-500">Diproses</span>
+                </div>
+
+                <!-- Step 3: Selesai -->
+                <div class="flex flex-col items-center gap-2 bg-slate-50/50 px-2.5">
+                  <div class="w-9 h-9 rounded-full border-2 flex items-center justify-center text-xs transition-all duration-300 ${step3}">
+                    3
+                  </div>
+                  <span class="text-[10px] font-bold text-slate-500">Selesai</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- DETIL INFORMASI -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 text-xs pt-4 border-t border-slate-200/60">
+              <div class="space-y-1">
+                <span class="text-slate-400 font-medium">Nama Lengkap Pemohon:</span>
+                <p class="font-bold text-slate-800 text-sm">${dataKetemu.nama_pemohon || '-'}</p>
+              </div>
+              <div class="space-y-1">
+                <span class="text-slate-400 font-medium">Layanan yang Diajukan:</span>
+                <p class="font-bold text-indigo-700 text-sm">${dataKetemu.jenis_layanan || '-'}</p>
+              </div>
+              <div class="space-y-1">
+                <span class="text-slate-400 font-medium">Tanggal Pengajuan:</span>
+                <p class="font-semibold text-slate-800">${dataKetemu.tanggal || '-'}</p>
+              </div>
+              <div class="space-y-1">
+                <span class="text-slate-400 font-medium">Tanggapan/Pesan dari Petugas TU:</span>
+                <p class="font-semibold text-slate-600 bg-white border border-slate-100 p-3 rounded-2xl italic leading-relaxed">
+                  "${dataKetemu.catatan_admin && dataKetemu.catatan_admin !== '-' ? dataKetemu.catatan_admin : 'Berkas Anda sedang dalam tahap verifikasi awal oleh Admin TU kami.'}"
+                </p>
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        // Tampilan jika ID salah / tidak terdaftar
+        hasilContainer.innerHTML = `
+          <div class="border border-red-100 bg-red-50/50 rounded-3xl p-8 text-center text-red-800 space-y-2">
+            <span class="text-3xl block">🔍❌</span>
+            <h4 class="font-bold text-sm">ID Pengajuan Tidak Ditemukan</h4>
+            <p class="text-xs text-red-600 max-w-sm mx-auto leading-relaxed">Pastikan ID yang dimasukkan sesuai dengan yang Anda terima (Contoh: SIPP-171234567). Mohon periksa kembali penggunaan huruf besar/kecil.</p>
+          </div>
+        `;
+      }
+    } else {
+      hasilContainer.innerHTML = `
+        <div class="text-center py-8 text-slate-500 text-xs font-semibold">
+          Belum ada data pengajuan dalam sistem SIPP.
+        </div>
+      `;
+    }
+  } catch (err) {
+    console.error("Gagal melacak:", err);
+    hasilContainer.innerHTML = `
+      <div class="text-center py-8 text-red-500 text-xs font-semibold">
+        Terjadi masalah koneksi internet saat memuat status Anda.
+      </div>
+    `;
+  } finally {
+    btnLacak.disabled = false;
+    btnLacak.innerHTML = originalBtnText;
+  }
+}
