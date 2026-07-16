@@ -229,51 +229,94 @@ function tutupModalSIPPDiLuar(e) {
   if (e.target.id === "modal-sipp") tutupModalSIPP();
 }
 
-// 6. Fungsi Kirim Data ke Google Sheets via API
+// ============================================================================
+// FUNGSI HELPER: Mengubah Berkas Menjadi Teks Base64 (Berdiri Sendiri)
+// ============================================================================
+function readAsBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+}
+
+// ============================================================================
+// FUNGSI UTAMA: Mengirim Data & Berkas ke Google Sheets + Drive
+// ============================================================================
 async function kirimPengajuanSIPP(event) {
   event.preventDefault();
-  const btn = document.getElementById('btn-kirim-sipp');
+  
+  const btn = document.getElementById("btn-submit-sipp");
   const teksAsli = btn.innerHTML;
   
-  // Ubah tombol jadi loading
-  btn.disabled = true;
-  btn.innerHTML = `<span class="inline-block animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent"></span><span>Mengirim...</span>`;
-
+  // 1. Ambil data teks dari form input
   const dataPengajuan = {
-    id: "SIPP-" + Date.now(),
-    tanggal: new Date().toLocaleDateString('id-ID'),
-    nama_pemohon: document.getElementById('sipp-nama').value,
-    no_wa: document.getElementById('sipp-wa').value,
-    jenis_layanan: document.getElementById('sipp-input-layanan').value,
-    detail_keperluan: document.getElementById('sipp-detail').value,
+    nama_pemohon: document.getElementById("input-sipp-nama").value,
+    no_wa: document.getElementById("input-sipp-wa").value,
+    jenis_layanan: document.getElementById("input-sipp-layanan").value,
+    detail_keperluan: document.getElementById("input-sipp-detail").value,
     status: "Menunggu Diproses",
     catatan_admin: "-"
   };
 
+  // 2. Cek apakah pengguna mengunggah berkas
+  const fileInput = document.getElementById("input-sipp-file");
+  if (fileInput && fileInput.files.length > 0) {
+    const fileSelected = fileInput.files[0];
+    
+    // Validasi: Ukuran maksimal 2MB
+    if (fileSelected.size > 2 * 1024 * 1024) {
+      alert("❌ Ukuran berkas terlalu besar! Maksimal berkas yang diizinkan adalah 2MB.");
+      return;
+    }
+    
+    btn.disabled = true;
+    btn.innerHTML = `<span class="inline-block animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent mr-1"></span> Memproses Berkas...`;
+    
+    try {
+      // Di sini fungsi HELPER di atas dipanggil
+      const stringBase64 = await readAsBase64(fileSelected);
+      dataPengajuan.berkasBase64 = stringBase64;
+      dataPengajuan.berkasNama = fileSelected.name;
+      dataPengajuan.berkasMime = fileSelected.type;
+    } catch (encodeError) {
+      console.error("Gagal membaca berkas:", encodeError);
+      alert("Gagal memproses berkas. Silakan coba unggah ulang.");
+      btn.disabled = false;
+      btn.innerHTML = teksAsli;
+      return;
+    }
+  }
+
+  // 3. Proses pengiriman data ke server GAS CMS
+  btn.disabled = true;
+  btn.innerHTML = `<span class="inline-block animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent mr-1"></span> Mengirim Pengajuan...`;
+
   try {
-    // Memanggil API Create/Insert ke tab 'sipp'
     const res = await CMS_API.create("sipp", dataPengajuan);
     
     if (res.status === "success") {
-      // Ambil ID dari respon server (jika Google Script mengirimkannya balik)
-      // atau gunakan ID bawaan client jika server tidak mengirim balik.
       const idRegistrasi = res.id || dataPengajuan.id;
-
-      // MENAMPILKAN POPUP BESERTA NOMOR REGISTRASI
+      
       alert(
         `🎉 PENGAJUAN BERHASIL DIKIRIM!\n\n` +
-        `Catat & Simpan KODE REGISTRASI Anda untuk melacak status layanan:\n` +
+        `Catat & Simpan KODE REGISTRASI Anda untuk melacak status:\n` +
         `👉 ${idRegistrasi} 👈\n\n` +
-        `Petugas Tata Usaha kami akan segera menghubungi Anda melalui WhatsApp.`
+        `Berkas prasyarat berhasil diunggah ke cloud storage sistem.`
       );
       
+      // Tutup modal form dan reset inputan
       tutupModalSIPP();
+      const formSipp = document.getElementById("form-sipp");
+      if (formSipp) formSipp.reset();
+      
     } else {
-      alert("Gagal mengirim pengajuan. Silakan coba lagi nanti.");
+      alert("Gagal mengirim pengajuan: " + res.message);
     }
   } catch (err) {
-    console.error("Error SIPP:", err);
-    alert("Terjadi kesalahan koneksi. Pastikan internet aktif dan coba lagi.");
+    console.error("Error Sistem SIPP:", err);
+    alert("Terjadi gangguan jaringan internet. Silakan coba sesaat lagi.");
   } finally {
     btn.disabled = false;
     btn.innerHTML = teksAsli;
