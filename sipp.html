@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIPP - Pelayanan Publik SMPN 1 Bangsal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+  <!-- Container Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- HERO HEADER -->
+  <section class="bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 text-white py-16 px-4 text-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    <div class="relative z-10 max-w-3xl mx-auto">
+      <span class="text-indigo-400 font-bold uppercase tracking-wider text-xs bg-indigo-400/10 px-3 py-1 rounded-full border border-indigo-400/20">Layanan Satu Pintu</span>
+      <h1 class="text-3xl md:text-5xl font-extrabold mt-3 tracking-tight">Sistem Informasi Pelayanan Publik</h1>
+      <p class="text-slate-300 mt-3 text-sm md:text-base max-w-xl mx-auto">
+        Pelayanan administrasi online secara mudah, transparan, dan cepat untuk siswa, orang tua, alumni, dan masyarakat.
+      </p>
+    </div>
+  </section>
+
+  <!-- KONTEN UTAMA -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full space-y-12">
+    
+    <!-- Informasi Alur Layanan -->
+    <div class="bg-indigo-900 text-white rounded-3xl p-6 md:p-8 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="space-y-1 text-center md:text-left">
+        <h2 class="text-lg font-bold">⚡ Bagaimana Alur Pengajuan Online?</h2>
+        <p class="text-indigo-200 text-xs">Pilih jenis layanan di bawah ➔ Isi formulir online ➔ Tunggu pesan WhatsApp dari petugas TU kami.</p>
+      </div>
+      <div class="flex items-center gap-4 bg-indigo-800/80 px-5 py-3 rounded-2xl border border-indigo-700/50 shrink-0 text-xs font-semibold">
+        <span>🕒 Jam Operasional TU:</span>
+        <span class="text-amber-400">Senin - Jumat (07.00 - 14.00 WIB)</span>
+      </div>
+    </div>
+
+    <!-- GRID KATALOG LAYANAN (Diberi ID agar dimuat otomatis oleh JavaScript) -->
+    <div id="katalog-sipp-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Data Card Katalog akan disuntikkan secara dinamis di sini -->
+    </div>
+
+    <!-- Panggilan Bantuan Offline -->
+    <div class="bg-white rounded-3xl p-6 md:p-8 border border-slate-100 text-center max-w-2xl mx-auto space-y-3">
+      <span class="text-2xl">🏛️</span>
+      <h3 class="font-bold text-slate-900 text-base">Butuh Bantuan Langsung di Sekolah?</h3>
+      <p class="text-slate-500 text-xs leading-relaxed">
+        Jika Anda mengalami kesulitan dalam pengajuan online, Anda tetap dapat mengunjungi Loket Pelayanan Tata Usaha (TU) SMPN 1 Bangsal pada jam kerja dengan membawa dokumen persyaratan resmi.
+      </p>
+    </div>
+
+  </main>
+
+  <!-- Container Footer -->
+  <div id="footer-container"></div>
+
+  <!-- SCRIPTS UTAMA -->
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/components.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Panggil fungsi untuk memuat kartu katalog ke dalam container
+      muatKatalogSIPP("katalog-sipp-container");
+    });
+  </script>
+</body>
+</html>
