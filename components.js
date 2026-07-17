@@ -589,3 +589,157 @@ function tutupModalBeritaDiLuar(event) {
     tutupModalBerita();
   }
 }
+// ============================================================================
+// FUNGSI DINAMIS GALERI VIDEO (MENGAMBIL DATA DARI GOOGLE SHEETS)
+// ============================================================================
+
+// 1. Fungsi Pintar: Mengubah Link Biasa menjadi Link Embed secara Otomatis
+function konversiKeEmbedUrl(url, platform) {
+  if (!url) return "";
+  let urlBersih = url.trim();
+
+  // Jika admin sudah memasukkan link yang memang berformat embed, langsung gunakan
+  if (urlBersih.includes("/embed")) return urlBersih;
+
+  try {
+    // Konversi YouTube Shorts / Video Biasa
+    if (platform.toLowerCase() === "youtube") {
+      if (urlBersih.includes("/shorts/")) {
+        return urlBersih.replace("/shorts/", "/embed/");
+      } else if (urlBersih.includes("youtu.be/")) {
+        const idVideo = urlBersih.split("youtu.be/")[1]?.split("?")[0];
+        return `https://www.youtube.com/embed/${idVideo}`;
+      } else if (urlBersih.includes("watch?v=")) {
+        const idVideo = urlBersih.split("watch?v=")[1]?.split("&")[0];
+        return `https://www.youtube.com/embed/${idVideo}`;
+      }
+    } 
+    // Konversi Instagram Reels
+    else if (platform.toLowerCase() === "instagram") {
+      // Menghapus tanda garis miring (/) di ujung link jika ada, lalu tambah /embed
+      urlBersih = urlBersih.replace(/\/$/, "");
+      return `${urlBersih}/embed`;
+    } 
+    // Konversi TikTok
+    else if (platform.toLowerCase() === "tiktok") {
+      // Mengambil deretan angka ID di bagian akhir link TikTok
+      const matchId = urlBersih.match(/video\/(\d+)/);
+      if (matchId && matchId[1]) {
+        return `https://www.tiktok.com/embed/v2/${matchId[1]}`;
+      }
+    }
+  } catch (err) {
+    console.error("Gagal mengonversi link video:", err);
+  }
+
+  // Jika gagal dikonversi, kembalikan URL aslinya
+  return urlBersih;
+}
+
+// 2. Fungsi Utama: Mengambil Data dari Sheet "sorotan_video" dan Menampilkan ke Web
+async function muatReelsSekolah() {
+  const container = document.getElementById("reels-sekolah-container");
+  if (!container) return;
+
+  // Tampilkan efek loading animasi berputar
+  container.innerHTML = `
+    <div class="col-span-full py-12 text-center">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-600 border-t-transparent"></div>
+      <p class="text-xs text-slate-400 mt-2 font-medium">Memuat video terbaru sekolah...</p>
+    </div>
+  `;
+
+  try {
+    // Panggil API Google Sheets untuk tab 'sorotan_video'
+    const res = await CMS_API.get("sorotan_video");
+    
+    if (res.status === "success" && Array.isArray(res.data)) {
+      // Filter hanya video yang kolom statusnya bertuliskan "Aktif" (abaikan huruf besar/kecil)
+      const videoAktif = res.data.filter(item => 
+        item.status && item.status.toString().trim().toLowerCase() === "aktif"
+      );
+
+      // Jika data kosong atau belum ada yang aktif
+      if (videoAktif.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-8 text-center bg-slate-50 rounded-2xl border border-slate-100">
+            <p class="text-xs text-slate-400">Belum ada video sorotan yang aktif saat ini.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Rakit kode HTML kartu video
+      let htmlKonten = "";
+
+      videoAktif.forEach(video => {
+        const platform = video.platform || "YouTube";
+        const embedUrl = konversiKeEmbedUrl(video.url_video, platform);
+        const linkAsli = video.url_video || "#";
+
+        // Tentukan warna badge dan ikon berdasarkan platform
+        let badgeWarna = "bg-red-500 text-white";
+        let ikon = "▶️";
+        if (platform.toLowerCase() === "instagram") {
+          badgeWarna = "bg-gradient-to-r from-purple-500 to-pink-500 text-white";
+          ikon = "📸";
+        } else if (platform.toLowerCase() === "tiktok") {
+          badgeWarna = "bg-black text-white border border-slate-700";
+          ikon = "🎵";
+        }
+
+        htmlKonten += `
+          <div class="bg-white rounded-3xl shadow-md overflow-hidden border border-slate-100 flex flex-col hover:shadow-xl transition-all duration-300 group">
+            
+            <!-- Wadah Video Vertikal (Rasio 9:16) -->
+            <div class="relative aspect-[9/16] w-full bg-slate-900 overflow-hidden">
+              <iframe 
+                src="${embedUrl}" 
+                class="w-full h-full border-0 absolute inset-0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+              </iframe>
+              
+              <!-- Badge Platform di Pojok Kanan Atas -->
+              <div class="absolute top-3 right-3 z-10 pointer-events-none">
+                <span class="${badgeWarna} text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md flex items-center gap-1">
+                  <span>${ikon}</span> ${platform}
+                </span>
+              </div>
+            </div>
+
+            <!-- Keterangan & Tombol Link Asli -->
+            <div class="p-4 flex-1 flex flex-col justify-between bg-slate-50/50">
+              <h4 class="font-bold text-xs md:text-sm text-slate-800 line-clamp-2 mb-3 leading-snug">
+                ${video.judul || "Tanpa Judul"}
+              </h4>
+              <a href="${linkAsli}" target="_blank" rel="noopener noreferrer" class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 flex items-center justify-between border-t border-slate-200/60 pt-2 transition">
+                <span>Buka di ${platform}</span>
+                <span>↗</span>
+              </a>
+            </div>
+
+          </div>
+        `;
+      });
+
+      container.innerHTML = htmlKonten;
+
+    } else {
+      throw new Error("Format data tidak valid dari server");
+    }
+
+  } catch (err) {
+    console.error("Gagal memuat video:", err);
+    container.innerHTML = `
+      <div class="col-span-full py-8 text-center">
+        <p class="text-xs text-red-500">Gagal memuat galeri video. Periksa koneksi internet Anda.</p>
+      </div>
+    `;
+  }
+}
+
+// 3. Panggil fungsi ini saat halaman web selesai dimuat
+document.addEventListener("DOMContentLoaded", () => {
+  muatReelsSekolah();
+});
