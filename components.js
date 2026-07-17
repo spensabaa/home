@@ -593,36 +593,42 @@ function tutupModalBeritaDiLuar(event) {
 // FUNGSI DINAMIS GALERI VIDEO (MENGAMBIL DATA DARI GOOGLE SHEETS)
 // ============================================================================
 
-// 1. Fungsi Pintar: Mengubah Link Biasa menjadi Link Embed secara Otomatis
+
+// 1. Fungsi Pintar (Versi Upgrade): Membuang parameter pelacak & mengambil ID video secara akurat
 function konversiKeEmbedUrl(url, platform) {
   if (!url) return "";
-  let urlBersih = url.trim();
+  let urlBersih = url.toString().trim();
 
-  // Jika admin sudah memasukkan link yang memang berformat embed, langsung gunakan
-  if (urlBersih.includes("/embed")) return urlBersih;
+  // Bersihkan parameter query (segala sesuatu setelah tanda tanya '?')
+  // Contoh: .../reel/C-xyz/?igsh=123 -> .../reel/C-xyz
+  let urlTanpaParam = urlBersih.split("?")[0];
+  
+  // Hapus tanda garis miring di paling ujung jika ada
+  urlTanpaParam = urlTanpaParam.replace(/\/$/, "");
 
   try {
-    // Konversi YouTube Shorts / Video Biasa
-    if (platform.toLowerCase() === "youtube") {
-      if (urlBersih.includes("/shorts/")) {
-        return urlBersih.replace("/shorts/", "/embed/");
-      } else if (urlBersih.includes("youtu.be/")) {
-        const idVideo = urlBersih.split("youtu.be/")[1]?.split("?")[0];
-        return `https://www.youtube.com/embed/${idVideo}`;
-      } else if (urlBersih.includes("watch?v=")) {
-        const idVideo = urlBersih.split("watch?v=")[1]?.split("&")[0];
-        return `https://www.youtube.com/embed/${idVideo}`;
+    const plat = (platform || "").toLowerCase();
+
+    // --- 1. KONVERSI YOUTUBE ---
+    if (plat.includes("youtube") || urlBersih.includes("youtu")) {
+      // Mengambil tepat 11 karakter ID YouTube dari berbagai jenis link
+      const match = urlBersih.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|shorts\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+      if (match && match[1]) {
+        return `https://www.youtube.com/embed/${match[1]}?rel=0`;
       }
     } 
-    // Konversi Instagram Reels
-    else if (platform.toLowerCase() === "instagram") {
-      // Menghapus tanda garis miring (/) di ujung link jika ada, lalu tambah /embed
-      urlBersih = urlBersih.replace(/\/$/, "");
-      return `${urlBersih}/embed`;
+    // --- 2. KONVERSI INSTAGRAM ---
+    else if (plat.includes("instagram") || urlBersih.includes("instagram.com")) {
+      // Jika sudah berakhiran /embed, langsung pakai
+      if (urlTanpaParam.endsWith("/embed")) {
+        return urlTanpaParam;
+      }
+      // Tambahkan /embed di akhir link yang sudah bersih
+      return `${urlTanpaParam}/embed/`;
     } 
-    // Konversi TikTok
-    else if (platform.toLowerCase() === "tiktok") {
-      // Mengambil deretan angka ID di bagian akhir link TikTok
+    // --- 3. KONVERSI TIKTOK ---
+    else if (plat.includes("tiktok") || urlBersih.includes("tiktok.com")) {
+      // Mengambil deretan angka ID video TikTok
       const matchId = urlBersih.match(/video\/(\d+)/);
       if (matchId && matchId[1]) {
         return `https://www.tiktok.com/embed/v2/${matchId[1]}`;
@@ -632,8 +638,8 @@ function konversiKeEmbedUrl(url, platform) {
     console.error("Gagal mengonversi link video:", err);
   }
 
-  // Jika gagal dikonversi, kembalikan URL aslinya
-  return urlBersih;
+  // Jika tidak cocok dengan platform di atas, kembalikan URL bersih
+  return urlTanpaParam;
 }
 
 // 2. Fungsi Utama: Mengambil Data dari Sheet "sorotan_video" (Versi Universal Fetch)
