@@ -93,13 +93,7 @@ const KATALOG_SIPP = [
     deskripsi: "Pengurusan surat keterangan pindah sekolah masuk ataupun keluar.",
     syarat: ["Surat permohonan dari orang tua", "Surat penerimaan dari sekolah tujuan (jika pindah keluar)", "Bebas tanggungan perpustakaan"]
   },
-  {
-    id: "pengaduan",
-    nama: "Kotak Pengaduan & Aspirasi",
-    ikon: "💡",
-    deskripsi: "Sampaikan keluhan, saran, maupun aspirasi untuk kemajuan SMPN 1 Bangsal.",
-    syarat: ["Identitas jelas & dapat dipertanggungjawabkan", "Menggunakan bahasa yang santun", "Privasi pelapor dijamin aman"]
-  }
+  
 ];
 
 // 2. Fungsi untuk menampilkan katalog layanan SIPP di halaman
