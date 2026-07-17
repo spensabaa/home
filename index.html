@@ -38,20 +38,50 @@
     <div id="berita-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 hidden"></div>
   </main>
 
-  <!-- ================= SEKSI VIDEO SHORTS / REELS SEKOLAH ================= -->
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-  <div class="text-center max-w-3xl mx-auto mb-10">
-    <span class="text-xs font-bold uppercase tracking-wider text-pink-600 bg-pink-100 px-3 py-1 rounded-full border border-pink-200">Aktivitas & Kreativitas</span>
-    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">📱 Sorotan Video Sekolah</h2>
-    <p class="text-slate-500 text-sm mt-2">Saksikan keseruan kegiatan, prestasi, dan kreativitas siswa-siswi SMPN 1 Bangsal lewat video pendek kami.</p>
-  </div>
+  <!-- =================================================================== -->
+    <!--            SEKSI GALERI VIDEO SHORTS / REELS / TIKTOK               -->
+    <!-- =================================================================== -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      
+      <!-- Bagian Judul (Header Seksi) -->
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3.5 py-1.5 rounded-full border border-indigo-100 shadow-sm inline-flex items-center gap-1.5">
+          <span class="animate-pulse">🔴</span> Kreativitas & Aktivitas Siswa
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3 tracking-tight">
+          📱 Sorotan Video SMPN 1 Bangsal
+        </h2>
+        <p class="text-slate-500 text-sm sm:text-base mt-2 max-w-xl mx-auto leading-relaxed">
+          Saksikan berbagai keseruan kegiatan sekolah, prestasi siswa, hingga liputan acara terkini dalam format video pendek (9:16).
+        </p>
+      </div>
 
-  <!-- Grid Video akan disuntikkan secara dinamis oleh JavaScript di bawah ini -->
-  <div id="reels-sekolah-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center">
-    <!-- Kartu video akan muncul di sini -->
-  </div>
-</section>
-<!-- ====================================================================== -->
+      <!-- Wadah Grid Video (Akan diisi otomatis oleh components.js dari Google Sheets) -->
+      <div id="reels-sekolah-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center min-h-[300px]">
+        
+        <!-- Placeholder / Skeleton Loading (Muncul sementara saat data dari Sheets sedang diambil) -->
+        <div class="col-span-full flex flex-col items-center justify-center py-12 bg-slate-50/70 rounded-3xl border border-dashed border-slate-200">
+          <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-600 border-t-transparent mb-3"></div>
+          <p class="text-xs font-medium text-slate-400">Menghubungkan ke Google Sheets untuk memuat video...</p>
+        </div>
+
+      </div>
+
+      <!-- Tombol Opsional untuk Kunjungi Medsos Sekolah -->
+      <div class="mt-10 text-center">
+        <div class="inline-flex flex-wrap items-center justify-center gap-2 text-xs text-slate-500 bg-white px-5 py-3 rounded-2xl border border-slate-100 shadow-sm">
+          <span class="font-semibold text-slate-700">Ikuti akun resmi kami:</span>
+          <!-- Silakan ganti URL medsos di bawah ini sesuai akun asli SMPN 1 Bangsal -->
+          <a href="https://youtube.com" target="_blank" class="text-red-600 hover:underline font-medium inline-flex items-center gap-1">▶️ YouTube</a>
+          <span class="text-slate-300">|</span>
+          <a href="https://instagram.com" target="_blank" class="text-pink-600 hover:underline font-medium inline-flex items-center gap-1">📸 Instagram</a>
+          <span class="text-slate-300">|</span>
+          <a href="https://tiktok.com" target="_blank" class="text-slate-900 hover:underline font-medium inline-flex items-center gap-1">🎵 TikTok</a>
+        </div>
+      </div>
+
+    </section>
+    <!-- ==================== AKHIR SEKSI VIDEO SHORTS ===================== -->
   
   <!-- Tempat Menampung Footer Otomatis -->
   <div id="footer-container"></div>
