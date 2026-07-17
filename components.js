@@ -46,21 +46,27 @@ function renderFooter() {
   `;
 }
 
-// Komponen Reusable untuk Kartu Berita/Pengumuman
+// Komponen Reusable untuk Kartu Berita/Pengumuman (Sudah dengan Trigger Pop-up)
 function createBeritaCard(berita) {
+  // Mengubah objek berita menjadi teks aman agar bisa dikirim lewat onclick
+  const dataBeritaAman = encodeURIComponent(JSON.stringify(berita));
+  
   return `
     <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition duration-300 flex flex-col">
       <img class="h-48 w-full object-cover" src="${berita.url_gambar || 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?q=80&w=500'}" alt="${berita.judul}">
       <div class="p-6 flex-1 flex flex-col justify-between">
         <div>
           <div class="flex gap-2 items-center mb-3">
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">${berita.kategori}</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">${berita.kategori || 'Berita'}</span>
             <span class="text-xs text-gray-500">${new Date(berita.tanggal).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'})}</span>
           </div>
           <h3 class="font-bold text-lg text-gray-900 mb-2 line-clamp-2">${berita.judul}</h3>
           <p class="text-gray-600 text-sm line-clamp-3 mb-4">${berita.isi_konten}</p>
         </div>
-        <button class="text-blue-600 hover:text-blue-800 font-semibold text-sm inline-flex items-center gap-1 self-start">Baca Selengkapnya &rarr;</button>
+        <!-- 🛑 TOMBOL SUDAH DIBERI PERINTAH ONCLICK -->
+        <button onclick="bacaBeritaLengkap('${dataBeritaAman}')" class="text-blue-600 hover:text-blue-800 font-semibold text-sm inline-flex items-center gap-1 self-start transition cursor-pointer">
+          <span>Baca Selengkapnya &rarr;</span>
+        </button>
       </div>
     </div>
   `;
@@ -506,5 +512,80 @@ async function lacakPengajuanSIPP(event) {
   } finally {
     btnLacak.disabled = false;
     btnLacak.innerHTML = originalBtnText;
+  }
+}
+
+// ============================================================================
+// FUNGSI POP-UP MODAL BERITA LENGKAP
+// ============================================================================
+
+function bacaBeritaLengkap(dataEncoded) {
+  // 1. Mengubah kembali data teks menjadi objek berita
+  const berita = JSON.parse(decodeURIComponent(dataEncoded));
+  const tanggalFormat = new Date(berita.tanggal).toLocaleDateString('id-ID', {
+    weekday: 'long', 
+    day: 'numeric', 
+    month: 'long', 
+    year: 'numeric'
+  });
+
+  // 2. Hapus modal lama jika ada agar tidak menumpuk
+  const modalLama = document.getElementById("modal-berita-lengkap");
+  if (modalLama) modalLama.remove();
+
+  // 3. Merakit HTML Modal Pop-up
+  const modalHTML = `
+    <div id="modal-berita-lengkap" onclick="tutupModalBeritaDiLuar(event)" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-300">
+      <div id="modal-berita-box" class="bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden transform transition-all duration-300">
+        
+        <!-- Gambar Header Berita -->
+        <div class="relative h-64 w-full shrink-0 bg-slate-100">
+          <img class="w-full h-full object-cover" src="${berita.url_gambar || 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?q=80&w=500'}" alt="${berita.judul}">
+          <button onclick="tutupModalBerita()" class="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white w-9 h-9 rounded-full flex items-center justify-center transition backdrop-blur-md text-sm font-bold">✕</button>
+        </div>
+
+        <!-- Konten Isi Berita (Bisa di-scroll jika panjang) -->
+        <div class="p-6 md:p-8 overflow-y-auto space-y-4 flex-1">
+          <div class="flex items-center gap-2 text-xs">
+            <span class="px-3 py-1 rounded-full font-semibold bg-blue-100 text-blue-800">${berita.kategori || 'Berita'}</span>
+            <span class="text-slate-400">|</span>
+            <span class="text-slate-500 font-medium">📅 ${tanggalFormat}</span>
+          </div>
+          
+          <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 leading-snug">${berita.judul}</h2>
+          <hr class="border-slate-100">
+          
+          <!-- Isi teks berita dengan format paragraf yang rapi -->
+          <div class="text-slate-600 text-sm md:text-base leading-relaxed whitespace-pre-line space-y-3">
+            ${berita.isi_konten}
+          </div>
+        </div>
+
+        <!-- Footer Modal -->
+        <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
+          <button onclick="tutupModalBerita()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-6 py-2.5 rounded-xl text-xs font-bold transition">
+            Tutup Berita
+          </button>
+        </div>
+
+      </div>
+    </div>
+  `;
+
+  // 4. Masukkan modal ke dalam halaman web
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
+function tutupModalBerita() {
+  const modal = document.getElementById("modal-berita-lengkap");
+  if (modal) {
+    modal.remove();
+  }
+}
+
+// Fitur tambahan: Tutup modal jika area gelap di luar kotak diklik
+function tutupModalBeritaDiLuar(event) {
+  if (event.target.id === "modal-berita-lengkap") {
+    tutupModalBerita();
   }
 }
