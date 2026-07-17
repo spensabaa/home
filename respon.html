@@ -25,36 +25,7 @@
   <!-- KONTEN UTAMA -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-12">
     
-    <!-- KOLOM KIRI: CEK STATUS LAYANAN (7 COLS) -->
-    <section class="lg:col-span-7 space-y-6">
-      <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 space-y-6">
-        <div>
-          <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-            <span>🔍</span> Lacak Status Pengajuan
-          </h2>
-          <p class="text-slate-500 text-xs mt-1">Masukkan ID Pengajuan yang Anda dapatkan saat melakukan registrasi layanan offline maupun online.</p>
-        </div>
-
-        <!-- Input Form Pencarian ID -->
-        <div class="flex flex-col sm:flex-row gap-3">
-          <input type="text" id="input-ticket" placeholder="Contoh: REG-2026-001" 
-                 class="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
-          <button onclick="lacakPengajuan()" class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-6 py-3 rounded-xl shadow-sm text-sm transition flex items-center justify-center gap-2">
-            <span>Cari Data</span> ➔
-          </button>
-        </div>
-
-        <!-- AREA HASIL PELACAKAN -->
-        <div id="loading-lacak" class="hidden text-center py-8">
-          <div class="inline-block animate-spin rounded-full h-6 w-6 border-2 border-teal-500 border-t-transparent mb-2"></div>
-          <p class="text-slate-400 text-xs">Mencari data pengajuan Anda...</p>
-        </div>
-
-        <div id="hasil-lacak" class="hidden space-y-5 border-t pt-6">
-          <!-- Hasil dari JS dimasukkan ke sini -->
-        </div>
-      </div>
-    </section>
+    
 
     <!-- KOLOM KANAN: KIRIM FEEDBACK & ULASAN (5 COLS) -->
     <section class="lg:col-span-5 space-y-6">
