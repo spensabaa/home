@@ -636,7 +636,7 @@ function konversiKeEmbedUrl(url, platform) {
   return urlBersih;
 }
 
-// 2. Fungsi Utama: Mengambil Data dari Sheet "sorotan_video" dan Menampilkan ke Web
+// 2. Fungsi Utama: Mengambil Data dari Sheet "sorotan_video" (Versi Universal Fetch)
 async function muatReelsSekolah() {
   const container = document.getElementById("reels-sekolah-container");
   if (!container) return;
@@ -650,8 +650,18 @@ async function muatReelsSekolah() {
   `;
 
   try {
-    // Panggil API Google Sheets untuk tab 'sorotan_video'
-    const res = await CMS_API.get("sorotan_video");
+    // 🛑 PERBAIKAN DI SINI: Mencari alamat URL Web App Anda secara otomatis dari variabel yang ada
+    const urlScript = typeof SCRIPT_URL !== "undefined" ? SCRIPT_URL : 
+                      typeof API_URL !== "undefined" ? API_URL : 
+                      typeof URL_API !== "undefined" ? URL_API : 
+                      typeof BASE_URL !== "undefined" ? BASE_URL : null;
+
+    // Jika alamat URL tidak ditemukan di sistem, Anda bisa tempel manual link Web App GAS di dalam tanda kutip di bawah ini
+    const targetUrl = urlScript ? `${urlScript}?sheet=sorotan_video` : "MASUKKAN_URL_WEB_APP_GAS_ANDA_DI_SINI?sheet=sorotan_video";
+
+    // Memanggil data langsung ke Google Apps Script
+    const response = await fetch(targetUrl);
+    const res = await response.json();
     
     if (res.status === "success" && Array.isArray(res.data)) {
       // Filter hanya video yang kolom statusnya bertuliskan "Aktif" (abaikan huruf besar/kecil)
