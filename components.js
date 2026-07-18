@@ -667,6 +667,11 @@ async function muatReelsSekolah() {
 
     // Memanggil data langsung ke Google Apps Script
     const response = await fetch(targetUrl);
+    // CEK APAKAH RESPONNYA JSON ATAU HTML
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Server mengirim HTML, bukan JSON! Cek URL API atau perizinan.");
+      }
     const res = await response.json();
     
     if (res.status === "success" && Array.isArray(res.data)) {
