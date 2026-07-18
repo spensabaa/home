@@ -128,5 +128,21 @@
       }
     });
   </script>
+  <!-- Modal Popup Pengunjung -->
+  <div id="visitor-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center z-[100] p-4">
+    <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl animate-bounce-in">
+      <div class="mb-4 text-4xl">👋</div>
+      <h2 class="text-xl font-bold text-slate-800 mb-2">Selamat Datang!</h2>
+      <p class="text-slate-600 mb-6">Anda adalah pengunjung ke-</p>
+      
+      <!-- Angka Pengunjung -->
+      <div id="modal-visitor-count" class="text-5xl font-extrabold text-indigo-600 mb-6">0</div>
+      
+      <button onclick="document.getElementById('visitor-modal').classList.add('hidden')" 
+              class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl transition duration-200">
+        Tutup & Lanjutkan
+      </button>
+    </div>
+  </div>
 </body>
 </html>
