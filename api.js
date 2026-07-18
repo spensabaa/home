@@ -1,5 +1,5 @@
 // Ganti dengan URL Web App Apps Script Anda yang berakhiran /exec
-const API_URL = "https://script.google.com/macros/s/AKfycby4YggtG57F2yQ-TpEO6MQRpBAAUIGnRRmblwYPtW7D9luPTxtainoOc-qT072unCC0/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwl3lUXhW1713PKgSp0ijl2LaotW0wj-bTdvavrylrvtaEtmg3OvdEkP6F93ck4ZSdT/exec";
 
 const CMS_API = {
   // Ambil semua data dari sheet tertentu
