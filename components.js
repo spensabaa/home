@@ -756,56 +756,6 @@ async function muatReelsSekolah() {
 }
 
 // 3. Panggil fungsi ini saat halaman web selesai dimuat
-document.addEventListener("DOMContentLoaded", async () => {
-  try {
-    // 1. Ambil data identitas sekolah
-    // Pastikan URL API Anda benar (menggunakan ?sheet=identitas_sekolah)
-    const urlApi = (typeof SCRIPT_URL !== "undefined" ? SCRIPT_URL : "") + "?sheet=identitas_sekolah";
-    const response = await fetch(urlApi);
-    const res = await response.json();
-
-    if (res.status === "success" && Array.isArray(res.data)) {
-      const data = res.data;
-
-      // 2. Cari nilai "pengunjung" dan "wa_call_center" di dalam array data
-      // Kita asumsikan header sheet Anda adalah "Kunci" dan "Nilai"
-      const dataPengunjung = data.find(item => item.Kunci && item.Kunci.toLowerCase() === "pengunjung");
-      const dataWa = data.find(item => item.Kunci && item.Kunci.toLowerCase() === "wa_call_center");
-
-      // 3. Tampilkan Pengunjung
-      const counter = document.getElementById("counter-pengunjung");
-      if (counter && dataPengunjung) {
-        counter.innerText = dataPengunjung.Nilai || "0";
-      }
-
-      // 4. Aktifkan Tombol WA
-      const btnWa = document.getElementById("btn-wa");
-      if (btnWa && dataWa && dataWa.Nilai) {
-        // Hapus karakter non-angka (seperti + atau spasi) dari nomor WA
-        const nomorBersih = dataWa.Nilai.toString().replace(/\D/g, '');
-        btnWa.href = `https://wa.me/${nomorBersih}?text=Halo%20Admin%20SMPN%201%20Bangsal,%20saya%20ingin%20bertanya...`;
-      } else {
-        console.warn("Nomor WA tidak ditemukan di database.");
-      }
-    }
-  } catch (err) {
-    console.error("Gagal memuat identitas sekolah:", err);
-  }
-});
-
-// Panggil fungsi ini saat halaman dimuat
-document.addEventListener("DOMContentLoaded", async () => {
-  // Ambil data identitas sekolah
-  const res = await CMS_API.get("identitas_sekolah"); // Sesuaikan fungsi pemanggil API Anda
-  if (res.status === "success") {
-    // Tampilkan Pengunjung
-    const counter = document.getElementById("counter-pengunjung");
-    if(counter) counter.innerText = res.data.pengunjung || "0";
-    
-    // Aktifkan Tombol WA
-    const btnWa = document.getElementById("btn-wa");
-    if(btnWa && res.data.wa_call_center) {
-      btnWa.href = "https://wa.me/" + res.data.wa_call_center + "?text=Halo%20Admin%20SMPN%201%20Bangsal,%20saya%20ingin%20bertanya...";
-    }
-  }
+document.addEventListener("DOMContentLoaded", () => {
+  muatReelsSekolah();
 });
