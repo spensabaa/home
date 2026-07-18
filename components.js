@@ -759,3 +759,20 @@ async function muatReelsSekolah() {
 document.addEventListener("DOMContentLoaded", () => {
   muatReelsSekolah();
 });
+
+// Panggil fungsi ini saat halaman dimuat
+document.addEventListener("DOMContentLoaded", async () => {
+  // Ambil data identitas sekolah
+  const res = await CMS_API.get("identitas_sekolah"); // Sesuaikan fungsi pemanggil API Anda
+  if (res.status === "success") {
+    // Tampilkan Pengunjung
+    const counter = document.getElementById("counter-pengunjung");
+    if(counter) counter.innerText = res.data.pengunjung || "0";
+    
+    // Aktifkan Tombol WA
+    const btnWa = document.getElementById("btn-wa");
+    if(btnWa && res.data.wa_call_center) {
+      btnWa.href = "https://wa.me/" + res.data.wa_call_center + "?text=Halo%20Admin%20SMPN%201%20Bangsal,%20saya%20ingin%20bertanya...";
+    }
+  }
+});
