@@ -758,12 +758,12 @@ async function muatReelsSekolah() {
 // 3. Panggil semua fungsi saat halaman web selesai dimuat
 document.addEventListener("DOMContentLoaded", async () => {
   
-  // A. Muat Reels Sekolah
+  // A. Muat Reels Sekolah (Fungsi yang sudah ada sebelumnya)
   muatReelsSekolah();
 
-  // B. Muat Counter Pengunjung & Tombol WA
+  // B. Ambil data Identitas (Pengunjung & WA)
   try {
-    // Pastikan SCRIPT_URL sudah terdefinisi di skrip Anda
+    // Pastikan SCRIPT_URL sudah terdefinisi di project Anda
     const urlApi = (typeof SCRIPT_URL !== "undefined" ? SCRIPT_URL : "") + "?sheet=identitas_sekolah";
     
     const response = await fetch(urlApi);
@@ -772,23 +772,39 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (res.status === "success" && Array.isArray(res.data)) {
       const data = res.data;
 
-      // Cari data pengunjung
+      // Cari data pengunjung dan wa di spreadsheet
       const dataPengunjung = data.find(item => item.Kunci && item.Kunci.toLowerCase() === "pengunjung");
-      // Cari data WA
       const dataWa = data.find(item => item.Kunci && item.Kunci.toLowerCase() === "wa_call_center");
 
-      // Tampilkan Pengunjung
-      const counter = document.getElementById("counter-pengunjung");
-      if (counter && dataPengunjung) {
-        counter.innerText = dataPengunjung.Nilai || "0";
+      // 1. Update Footer (Angka Pengunjung)
+      if (dataPengunjung) {
+        const counter = document.getElementById("counter-pengunjung");
+        if (counter) counter.innerText = dataPengunjung.Nilai || "0";
       }
 
-      // Aktifkan Tombol WA
-      const btnWa = document.getElementById("btn-wa");
-      if (btnWa && dataWa && dataWa.Nilai) {
-        // Membersihkan nomor (menghapus karakter selain angka)
-        const nomorBersih = dataWa.Nilai.toString().replace(/\D/g, '');
-        btnWa.href = `https://wa.me/${nomorBersih}?text=Halo%20Admin%20SMPN%201%20Bangsal,%20saya%20ingin%20bertanya...`;
+      // 2. Update Tombol WA (Floating Button)
+      if (dataWa && dataWa.Nilai) {
+        const btnWa = document.getElementById("btn-wa");
+        if (btnWa) {
+          const nomorBersih = dataWa.Nilai.toString().replace(/\D/g, ''); // Hapus karakter selain angka
+          btnWa.href = `https://wa.me/${nomorBersih}?text=Halo%20Admin%20SMPN%201%20Bangsal,%20saya%20ingin%20bertanya...`;
+        }
+      }
+
+      // 3. Update & Munculkan Popup Modal (Hanya muncul sekali per sesi)
+      if (dataPengunjung) {
+        const modalCounter = document.getElementById("modal-visitor-count");
+        const visitorModal = document.getElementById("visitor-modal");
+        
+        if (modalCounter && visitorModal) {
+          modalCounter.innerText = dataPengunjung.Nilai || "0";
+          
+          // Cek apakah sudah pernah muncul di sesi ini agar tidak mengganggu terus menerus
+          if (!sessionStorage.getItem('visited')) {
+            visitorModal.classList.remove("hidden");
+            sessionStorage.setItem('visited', 'true');
+          }
+        }
       }
     }
   } catch (err) {
