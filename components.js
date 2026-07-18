@@ -755,7 +755,43 @@ async function muatReelsSekolah() {
   }
 }
 
-// 3. Panggil fungsi ini saat halaman web selesai dimuat
-document.addEventListener("DOMContentLoaded", () => {
+// 3. Panggil semua fungsi saat halaman web selesai dimuat
+document.addEventListener("DOMContentLoaded", async () => {
+  
+  // A. Muat Reels Sekolah
   muatReelsSekolah();
+
+  // B. Muat Counter Pengunjung & Tombol WA
+  try {
+    // Pastikan SCRIPT_URL sudah terdefinisi di skrip Anda
+    const urlApi = (typeof SCRIPT_URL !== "undefined" ? SCRIPT_URL : "") + "?sheet=identitas_sekolah";
+    
+    const response = await fetch(urlApi);
+    const res = await response.json();
+
+    if (res.status === "success" && Array.isArray(res.data)) {
+      const data = res.data;
+
+      // Cari data pengunjung
+      const dataPengunjung = data.find(item => item.Kunci && item.Kunci.toLowerCase() === "pengunjung");
+      // Cari data WA
+      const dataWa = data.find(item => item.Kunci && item.Kunci.toLowerCase() === "wa_call_center");
+
+      // Tampilkan Pengunjung
+      const counter = document.getElementById("counter-pengunjung");
+      if (counter && dataPengunjung) {
+        counter.innerText = dataPengunjung.Nilai || "0";
+      }
+
+      // Aktifkan Tombol WA
+      const btnWa = document.getElementById("btn-wa");
+      if (btnWa && dataWa && dataWa.Nilai) {
+        // Membersihkan nomor (menghapus karakter selain angka)
+        const nomorBersih = dataWa.Nilai.toString().replace(/\D/g, '');
+        btnWa.href = `https://wa.me/${nomorBersih}?text=Halo%20Admin%20SMPN%201%20Bangsal,%20saya%20ingin%20bertanya...`;
+      }
+    }
+  } catch (err) {
+    console.error("Gagal memuat data identitas sekolah:", err);
+  }
 });
