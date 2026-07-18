@@ -40,7 +40,7 @@ function renderFooter() {
     <footer class="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 mt-12">
       <div class="max-w-7xl mx-auto px-4 text-center">
         <p class="font-semibold text-white">&copy; 2026 SMPN 1 Bangsal. All Rights Reserved.</p>
-        <p class="text-sm mt-2">Powered by GitHub Pages & Google Sheets API</p>
+        <p class="text-sm mt-2">Hubungi Kami di +6289604175475</p>
       </div>
     </footer>
   `;
